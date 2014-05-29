@@ -1,0 +1,144 @@
+#header{
+	border: 0px;
+	border-bottom: 1px #1B1C1D solid;
+}
+
+#container > div{
+	display: none;
+}
+
+#container #loading_text{
+	display: block;
+}
+
+noscript{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.9);
+	text-align: center;
+}
+
+noscript h1{
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	margin-top: -20px;
+}
+
+.progress .progress-bar.no-transition {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+#playlist_list .playlist{
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+
+#playlist_list *{
+	color: white;
+}
+
+#playlist_list .playlist .form-control{
+	background-color: #2E2E2E;
+	cursor: default;
+	border: none;
+}
+
+#playlist_list .playlist.p_selected .form-control{
+	background-color: #2F863D;
+}
+
+#playlist_list .playlist.p_active .form-control{
+	background-color: #86362F;
+}
+
+#playlist_list .playlist.p_selected.p_active .form-control{
+	background-color: #7F862F;
+}
+
+#playlist_list .playlist .song_selector{
+	width: 80px;
+}
+
+.hidden{
+	display: none;
+}
+
+#video_list .video{
+	height: 100px;
+	position: relative;
+	text-align: left;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+#video_list .video.error{
+	cursor: default;
+}
+
+#video_list .video.selected{
+	background-color: rgb(49, 85, 49);
+}
+
+#video_list .video .img{
+	float: left;
+	clear: left;
+	height: 100%;
+	width: 175px;
+	text-align: center;
+	background-color: black;
+}
+
+#video_list .video .img img{
+	height: 100%;
+}
+
+#video_list .video .id:before{
+	content: "ID: ";
+}
+
+#video_list .video > div{
+	position: relative;
+	overflow: hidden;
+}
+
+#video_list .video > div:not(.img){
+	position: relative;
+	left: 5px;
+}
+
+#video_list .video .id{
+	padding-top: 5px;
+	height: 22px;
+	font-size: 12px;
+	font-weight: bold;
+	font-style: italic;
+}
+
+#video_list .video .channel{
+	color: #7C7C7C;
+	font-style: italic;
+	font-size: 12px;
+	height: 17px;
+}
+
+#video_list .video .name{
+	font-weight: bold;
+	font-size: 30px;
+	height: 35px;
+	line-height: 35px;
+}
+
+#video_list .video .error{
+	font-style: italic;
+	font-size: 13px;
+	height: 18px;
+	color: rgb(206, 99, 99);
+}

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>plug.dj -> Youtube | playlist exporter</title>
+	<!-- Bootstrap -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/bootstrap/css/bootstrap_dark.css" rel="stylesheet">	
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!-- debug.js -->
+	<link href='http://fonts.googleapis.com/css?family=Inconsolata:700,400' rel='stylesheet' type='text/css'>
+	<script src='debug.js'></script>
+	<link rel='stylesheet' href='debug.css'>
+	<!-- PYE Scripts -->
+	<link rel='stylesheet' href='pye.css'>
+	<script src='pye.js'></script>
+  </head>
+  <body>
+  	<div id='debug_console'></div>
+  	<noscript><h1>you must have javascript enabled</h1></noscript>
+  	<nav id='header' class="navbar navbar-static-top" role="navigation">
+		<p class="navbar-text navbar-left navbar-brand">plug.dj to Youtube exporter</p>
+		<p class="navbar-text navbar-right navbar-brand">Made by <a href="http://sq10.net/" target='_blank' class="navbar-link">Ivan</a></p>
+	</nav>
+	<div id='container' class='container text-center'>
+		<div id='loading_text'>
+			<h2>
+				Loading
+			</h2>
+			<div class="progress progress-striped active">
+				<div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+					<span class="sr-only"></span>
+				</div>
+			</div>
+		</div>
+		<div id='upload_file'>
+			<h2>
+				Upload JSON
+			</h2>
+			<p>
+				To start, upload the <code>PLUG_PLAYLISTS.json</code> file.<br>
+				To make one, read this <a target='_blank' href='/create_playlist/'>how-to.</a>
+			</p>
+			<div class="row">
+				<div class="col-md-11">
+					<input id='upload_input' type="file" class="form-control">	
+				</div>
+				<div class="col-md-1">
+					<button id='upload_read' type="button" class="btn btn-primary">Read</button>
+				</div>
+			</div>
+		</div>
+		<div id='prepare_gapi'>
+			<h2>
+				Preparing Google API...
+			</h2>
+		</div>
+		<div id='parsing_playlists'>
+			<h2>
+				Parsing playlists...
+			</h2>
+			<br>
+			Playlist
+			<div class="row">
+				<div id='progress_playlist_name' class="col-xs-2"></div>
+				<div class="col-xs-10">
+					<div class="progress progress-striped active">
+						<div id="progress_playlist" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+					</div>
+				</div>
+			</div>
+			Video
+			<div class="row">
+				<div id='progress_video_name' class="col-xs-2"></div>
+				<div class="col-xs-10">
+					<div class="progress progress-striped active">
+						<div id="progress_video" class="progress-bar no-transition progress-bar-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+					</div>
+				</div>
+			</div>
+			<h2 id='rendering_html' class='hidden'>Rendering HTML (can take a while, depending on computer speed!)</h2>
+		</div>
+		<div id='select_playlists'>
+			<h2>
+				Select playlists
+			</h2>
+			<p>
+				Now, select the playlists (and the songs inside of playlists) that you want to export.
+			</p>
+			<button type="button" id='done_selecting' class="btn btn-success btn-lg">Done selecting</button>
+			<div class="row">
+				<div id='playlist_list' class="col-sm-5">
+					<div class='row'>
+						<div class="btn-group">
+							<button type="button" id='playlist_select_all' class="btn btn-default">Select All</button>
+							<button type="button" id='playlist_select_none' class="btn btn-default">Select None</button>
+						</div>
+					</div><br>
+				</div>
+				<div id='video_list' class="col-sm-7">
+					<div class='row'>
+						<div class="btn-group">
+							<button type="button" id='video_select_all' class="btn btn-default">Select All</button>
+							<button type="button" id='video_select_none' class="btn btn-default">Select None</button>
+						</div>
+					</div><br>
+				</div>
+			</div>
+		</div>
+		<div id='authorize_api'>
+			<h2>
+				Authorize app
+			</h2>
+			<p>
+				The data looks good! Press the button below to authorize.
+			</p>
+			<button type="button" id='authorize_button' class="btn btn-success btn-lg">Authorize</button>
+		</div>
+		<div id='export_ready'>
+			<h2>
+				Export
+			</h2>
+			<p>
+				We're all ready! Press the button below to begin exporting.
+			</p>
+			<button type="button" id='export_button' class="btn btn-success btn-lg">Export</button>
+		</div>
+		<div id='export_status'>
+			<h2>
+				Exporting...
+			</h2>
+			<span id='export_info'></span>
+			<div class="row">
+				<div id='progress_export' class="col-xs-2"></div>
+				<div class="col-xs-10">
+					<div class="progress progress-striped active">
+						<div id="progress_export_bar" class="progress-bar no-transition progress-bar-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+					</div>
+				</div>
+			</div>
+			<div>Wondering why it's going so slow? Read <a target='_blank' href='https://code.google.com/p/gdata-issues/issues/detail?id=6392&sort=-id&colspec=API%20ID%20Type%20Status%20Priority%20Stars%20Summary'>this</a>!</div>
+		</div>
+		<div id='export_results'>
+			<h2>
+				Done!
+			</h2>
+			<p>
+				All done! If you like the results, and like this app, please consider donating!	
+			</p>
+			<a target='_blank' href="http://sq10.net/donate/" class="btn btn-success btn-lg" role="button">Donate</a>
+			<br><br>
+			<p>
+				Success Rate
+			</p>
+			<div class="progress progress-striped active">
+				<div id="progress_success_rate" class="progress-bar no-transition progress-bar-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+			</div>
+			<div class="row">
+				<div id='passed_playlists' class="col-xs-6">
+					<strong>Passed Playlists</strong>
+					<div class="list-group">
+						
+					</div>
+				</div>
+				<div id='failed_items' class="col-xs-6">
+					<strong>Failed Items</strong>
+					<em>coming soon!</em>
+					<div class='list-group'>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- templates -->
+	<div class='hidden'>
+		<div id='playlist_template'>
+			<div class='playlist input-group'>
+				<span class='id hidden'></span>
+				<span class="input-group-btn">
+					<button class="select btn btn-default" type="button">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</span>
+				<input type="text" class="form-control" disabled>
+				<span class="input-group-btn">
+					<button class="song_selector btn btn-default" type="button"></button>
+				</span>
+			</div>
+		</div>
+		<div id='video_template'>
+			<div class='video'>
+				<span class='partof hidden'></span>
+				<span class='vid hidden'></span>
+				<div class='img'>
+					<img src=''>
+				</div>
+				<div class='id'></div>
+				<div class='name'></div>
+				<div class='channel'></div>
+				<div class='error'></div>
+			</div>
+		</div>
+	</div>
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<!-- Bootstrap -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

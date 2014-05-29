@@ -1,0 +1,55 @@
+<!doctype html>
+<head>
+	<title>plug.dj playlist exporter</title>
+	<meta charset='utf-8'>
+	<link rel='stylesheet' href='pye.css'>
+	<script src='pye.js'></script>
+	<script src='jquery.js'></script>
+	<script src='dbg.js'></script>
+	<script src='gapi.js'></script>
+</head>
+<body>
+	<div id='container'>
+		<h1>plug.dj to Youtube playlist exporter</h1>
+		<h4 id='loading'>loading</h4>
+		<div id='content'>
+			<div id='file'>
+				Hey there!<br>
+				To export your playlists, upload the plugdj_playlists.json file.<br>
+				To make one, read <a target='_blank' href='/create_playlist/'>this</a>.<br>
+				<input id='fileinput' type='file'><br>
+				<button id='fileinputbutton'>Read</button>
+			</div>
+			<div id='authorize'>
+				The data looks OK!<br>
+				Now, to export it to Youtube, you need to authorize by pressing the button below.<br>
+				<em>Note: You have been automatically logged out, so you can choose the account to use.</em><br>
+				<button id='authbutton'>Authorize</button>
+			</div>
+			<div id='select_playlists'>
+				Select the playlists you want to export.<br><br>
+				<button id='doneselecting'>Done</button><br>
+				<div id='playlists'>
+					
+				</div>
+			</div>
+			<div id='working'>
+				Okay, we're all ready!<br>
+				Press the button below to start exporting.<br>
+				<button id='exportbutton'>Export</button>
+				<div id='status'></div>
+			</div>
+			<div id='result'>
+				Done!<br>&nbsp;<br>
+				Results<br>
+				<span id='pamt_imported'></span> playlists imported, <span id='pamt_skipped'></span> playlists skipped<br>
+				<span id='amt_imported'></span> videos imported, <span id='amt_skipped'></span> videos skipped<br>&nbsp;<br>
+				Resulting playlists<br>
+				<div id='result_playlists'></div><br>
+				<h2>Like this app? Please consider <a target='_blank' href='http://sq10.net/donate/'>donating</a>!</h2>
+			</div>
+		</div>
+	</div>
+	<div id='dbg_console'></div>
+	<iframe id='logout_iframe' src='https://accounts.google.com/logout'></iframe>
+</body>

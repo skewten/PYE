@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>How-to: plug.dj playlists to JSON</title>
+	<!-- Bootstrap -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/bootstrap/css/bootstrap_dark.css" rel="stylesheet">	
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+  </head>
+  <body>
+	<div class='container text-center' style='max-width: 700px;'>
+		<h2>Creating playlist JSON files</h2>
+		<p>
+			<em>This requires a good browser, like Google Chrome, or Firefox.</em>
+		</p>
+		<p>
+			First, your browser needs to have a variation of Greasemonkey.<br>
+			Click on the browser below to download the extension.<br>
+		</p>
+		<p>
+			<a target='_blank' href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en" class="btn btn-primary btn-lg" role="button">Chrome</a>
+			<a target='_blank' href="https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/" class="btn btn-primary btn-lg" role="button">Firefox</a>
+			<a target='_blank' href="http://www.macupdate.com/app/mac/20718/greasekit" class="btn btn-primary btn-lg" role="button">Safari</a>
+		</p>
+		<p>
+			Next, download and install the plug.dj playlist exporter userscript.
+		</p>
+		<p>
+			<a href="pye.user.js" class="btn btn-success btn-lg" role="button">Userscript</a>
+		</p>
+		<p>
+			Once installed, go to your favorite plug.dj room.<br>
+			If you're already in one, just reload the page for the script to take effect.<br>
+			When the room loads, type in <code>/pexport</code> into the chat.<br>
+			Once your file has saved, you can finally go back to the exporter, and input the saved <code>PLUG_PLAYLISTS.json</code> file.
+		</p>
+	</div>
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<!-- Bootstrap -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>
