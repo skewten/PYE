@@ -3,11 +3,12 @@
 // @description    Creates plug.dj playlist JSON files, and saves them to harddrive.
 // @author         Ivan (sq10.net)
 // @include        https://plug.dj/*
-// @version        2.0.5
+// @version        2.0.6
 // ==/UserScript==
 
 var playlists = {};
 var accepted = false;
+var cooloff = false;
 
 function check_for_api(){
     //We're going to keep trying to attach the API handler
@@ -84,8 +85,6 @@ function parse_playlists(){
 function get_playlists(){
     API.chatLog("[PYE] Step 3: Fetch individual playlists");
 
-    var cooloff = false;
-
     $("body").append("<div id='pye-pexport'>PAUSE PYE</div>");
     $("#pye-pexport").css({
         position: "fixed",
@@ -101,11 +100,12 @@ function get_playlists(){
         "text-align":"center",
         "z-index":10000
     });
-    $("#pye-export").on("click", function(){
+    $("#pye-pexport").on("click", function(){
         cooloff = true;
     });
 
     function finish(){
+        $("#pye-pexport").remove();
         parse_playlists();
     }
 
