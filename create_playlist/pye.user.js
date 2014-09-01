@@ -3,10 +3,11 @@
 // @description    Creates plug.dj playlist JSON files, and saves them to harddrive.
 // @author         Ivan (sq10.net)
 // @include        https://plug.dj/*
-// @version        2.0.3
+// @version        2.0.5
 // ==/UserScript==
 
 var playlists = {};
+var accepted = false;
 
 function check_for_api(){
     //We're going to keep trying to attach the API handler
@@ -24,6 +25,20 @@ function ready_up(){
 }
 
 function start_export(){
+    if (!accepted){
+        API.chatLog("[PYE] WARNING", true);
+        API.chatLog(
+            "BE CAREFUL USING THIS EXTENSION. "+
+            "WHEN YOU GET AN ALERT IN WHICH PYE IS SENDING TOO MANY REQUESTS, "+
+            "PRESS THE PAUSE BUTTON IN THE TOP LEFT CORNER IMMEDIATELY."
+        , true);
+        API.chatLog(
+            "If you have read this warning, and want to run the exporter, "+
+            "run the /pexport command again."
+        );
+        accepted = true;
+        return;
+    }
     API.chatLog("[PYE] Step 1: Load FileSaver.js");
     $.getScript("https://media.sq10.net/pye/FileSaver.js").done(function(){
         get_playlist_listing();
@@ -69,6 +84,27 @@ function parse_playlists(){
 function get_playlists(){
     API.chatLog("[PYE] Step 3: Fetch individual playlists");
 
+    var cooloff = false;
+
+    $("body").append("<div id='pye-pexport'>PAUSE PYE</div>");
+    $("#pye-pexport").css({
+        position: "fixed",
+        top: "55px",
+        left: "0px",
+        width: "200px",
+        height: "100px",
+        "font-size": "45px",
+        "line-height": "50px",
+        "color":"white",
+        "background-color":"red",
+        "cursor":"pointer",
+        "text-align":"center",
+        "z-index":10000
+    });
+    $("#pye-export").on("click", function(){
+        cooloff = true;
+    });
+
     function finish(){
         parse_playlists();
     }
@@ -80,6 +116,14 @@ function get_playlists(){
             finish();
             return;
         }
+
+        if (cooloff){
+            API.chatLog("[PYE] Pause button pressed. Cooling off for 15 seconds.");
+            cooloff = false;
+            setTimeout(fetch_next, 15000);
+            return;
+        }
+
         var cur = queue.pop();
         API.chatLog("[PYE] Fetching playlist "+(totalQueue-queue.length)+" of "+totalQueue);
 
