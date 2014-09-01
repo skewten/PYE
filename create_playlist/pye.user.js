@@ -65,8 +65,11 @@ function parse_playlists(){
             newName = item.name;
 
         while (jo.playlists[newName]){
+            console.log("jo.playlists["+newName+"]");
+            console.log(jo.playlists[newName]);
             newName = oldName+" ("+ct+")";
             ct++;
+            console.log("while loop called");
         }
 
         jo.playlists[newName] = [];
@@ -79,6 +82,7 @@ function parse_playlists(){
         }
     }
     
+    console.log("calling save_json");
     save_json(jo);
 }
 
