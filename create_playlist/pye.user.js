@@ -3,7 +3,7 @@
 // @description    Creates plug.dj playlist JSON files, and saves them to harddrive.
 // @author         Ivan (sq10.net)
 // @include        https://plug.dj/*
-// @version        2.0.1
+// @version        2.0.2
 // ==/UserScript==
 
 var playlists = {};
@@ -93,7 +93,7 @@ function get_playlists(){
                 return;
             }
             playlists[cur].items = data.data;
-            setTimeout(fetch_next, 100);
+            setTimeout(fetch_next, 1000);
         }
 
         $.ajax({
