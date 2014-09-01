@@ -3,12 +3,13 @@
 // @description    Creates plug.dj playlist JSON files, and saves them to harddrive.
 // @author         Ivan (sq10.net)
 // @include        https://plug.dj/*
-// @version        2.0.6
+// @version        2.0.8
 // ==/UserScript==
 
 var playlists = {};
 var accepted = false;
 var cooloff = false;
+var autocooloff = false;
 
 function check_for_api(){
     //We're going to keep trying to attach the API handler
@@ -65,24 +66,20 @@ function parse_playlists(){
             newName = item.name;
 
         while (jo.playlists[newName]){
-            console.log("jo.playlists["+newName+"]");
-            console.log(jo.playlists[newName]);
             newName = oldName+" ("+ct+")";
             ct++;
-            console.log("while loop called");
         }
 
         jo.playlists[newName] = [];
         for (var x=0;x<item.items.length;x++){
             var media = item.items[x];
-            jo.playlists.push({
+            jo.playlists[newName].push({
                 type:media.format,
                 id:media.cid
             });
         }
     }
-    
-    console.log("calling save_json");
+
     save_json(jo);
 }
 
@@ -122,11 +119,20 @@ function get_playlists(){
         }
 
         if (cooloff){
-            API.chatLog("[PYE] Pause button pressed. Cooling off for 15 seconds.");
+            API.chatLog("[PYE] Pause button pressed. Cooling off for 1 minute.");
             cooloff = false;
-            setTimeout(fetch_next, 15000);
+            setTimeout(fetch_next, 60000);
             return;
         }
+
+        if (!autocooloff && (queue.length%15) == 0){
+            API.chatLog("[PYE] Autocooloff. Will resume playlist fetching in 2 minutes to avoid plug.dj tempban.");
+            autocooloff = true;
+            setTimeout(fetch_next, 60000*2);
+            return;
+        }
+
+        autocooloff = false;
 
         var cur = queue.pop();
         API.chatLog("[PYE] Fetching playlist "+(totalQueue-queue.length)+" of "+totalQueue);
@@ -141,7 +147,7 @@ function get_playlists(){
                 return;
             }
             playlists[cur].items = data.data;
-            setTimeout(fetch_next, 1000);
+            setTimeout(fetch_next);
         }
 
         $.ajax({
