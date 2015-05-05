@@ -1,7 +1,7 @@
 /*
 	PYE!
 	Created by Ivan (sq10.net)
-	v0.2
+	v0.3
 */
 /*
 	The MIT License (MIT)
@@ -26,6 +26,9 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
+
+var PYE_VERSION = "0.3";
+
 window.onload = init;
 function init(){
 	step(1);
@@ -55,7 +58,7 @@ PYE.step = {};
 ////////
 //Step 1
 PYE.step.upload_file = function(){
-	debug.log("PYE!");
+	debug.log("PYE! v"+PYE_VERSION);
 	debug.log("Created by Ivan (sq10.net)");
 	debug.log("==========================");
 	$("#upload_read").on("click", PYE.read_file);
