@@ -1,7 +1,7 @@
 /*
 	PYE!
 	Created by Ivan (sq10.net)
-	v0.1
+	v0.2
 */
 /*
 	The MIT License (MIT)
@@ -222,6 +222,7 @@ PYE.count_down_videos = function(){
 
 PYE.parse_videos = function(){
 	$("#progress_video_name").text(PYE.data.currentPlaylistLeft+" videos left");
+	if (!PYE.data.videosToParse.length) return setTimeout(PYE.parse_next_playlist);
 	while (PYE.data.videosToParse.length != 0){
 		(function(currentVideo){
 			var currentPlaylist = PYE.data.parsedPlaylists[PYE.data.currentPlaylist]
