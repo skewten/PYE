@@ -1,0 +1,32 @@
+{
+  "name": "pye",
+  "version": "1.0.0",
+  "description": "0.0.1",
+  "main": "gulpfile.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "browser-sync": "^2.8.2",
+    "del": "^1.2.1",
+    "express": "^4.13.3",
+    "gulp": "^3.9.0",
+    "jade": "^1.11.0",
+    "livescript": "^1.4.0",
+    "livescript-middleware": "^1.0.1",
+    "node-sass-middleware": "git+https://github.com/SEAPUNK/node-sass-middleware.git",
+    "nodemon": "^1.4.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seapunk/pye.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seapunk/pye/issues"
+  },
+  "homepage": "https://github.com/seapunk/pye#readme"
+}

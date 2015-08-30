@@ -1,1 +1,4 @@
 _old/
+node_modules/
+src/css/
+src/js/
