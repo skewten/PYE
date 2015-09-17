@@ -4,6 +4,8 @@
 // @author         Ivan (sq10.net)
 // @include        https://plug.dj/*
 // @version        2.0.8
+// @require        https://media.sq10.net/pye/FileSaver.js
+// @grant          none
 // ==/UserScript==
 
 var playlists = {};
@@ -33,7 +35,7 @@ function start_export(){
             "BE CAREFUL USING THIS EXTENSION. "+
             "WHEN YOU GET AN ALERT IN WHICH PYE IS SENDING TOO MANY REQUESTS, "+
             "PRESS THE PAUSE BUTTON IN THE TOP LEFT CORNER IMMEDIATELY."
-        , true);
+            , true);
         API.chatLog(
             "If you have read this warning, and want to run the exporter, "+
             "run the /pexport command again."
@@ -41,14 +43,10 @@ function start_export(){
         accepted = true;
         return;
     }
-    API.chatLog("[PYE] Step 1: Load FileSaver.js");
-    $.getScript("https://media.sq10.net/pye/FileSaver.js").done(function(){
-        get_playlist_listing();
-    }).fail(function(jqxhr, settings, exception){
-        API.chatLog("[PYE] Could not fetch FileSaver.js!", true);
-        API.chatLog("[PYE] Exception: "+String(exception), true);
-    });
+
+    get_playlist_listing();
 }
+
 
 function parse_playlists(){
     API.chatLog("[PYE] Step 4: Parsing playlists into PYE JSON file.")
@@ -60,7 +58,7 @@ function parse_playlists(){
 
     for (var i in playlists){
         var item = playlists[i];
-        
+
         var ct = 1,
             oldName = item.name,
             newName = item.name;
@@ -168,7 +166,7 @@ function get_playlists(){
 
 function get_playlist_listing(){
     API.chatLog("[PYE] Step 2: Fetch playlist listing");
-    
+
     //Define the handler functions.
     function ajax_success(data){
         if (data.status != "ok"){
@@ -200,7 +198,7 @@ function get_playlist_listing(){
         type: "GET",
         fail: ajax_error,
         success: ajax_success
-    }); 
+    });
 }
 
 function save_json(obj){
