@@ -47,9 +47,8 @@ function start_export(){
     get_playlist_listing();
 }
 
-
 function parse_playlists(){
-    API.chatLog("[PYE] Step 4: Parsing playlists into PYE JSON file.")
+    API.chatLog("[PYE] Step 3: Parsing playlists into PYE JSON file.")
     var jo = {
         is_plugdj_playlist: true,
         userid: API.getUser().username,
@@ -82,7 +81,7 @@ function parse_playlists(){
 }
 
 function get_playlists(){
-    API.chatLog("[PYE] Step 3: Fetch individual playlists");
+    API.chatLog("[PYE] Step 2: Fetch individual playlists");
 
     $("body").append("<div id='pye-pexport'>PAUSE PYE</div>");
     $("#pye-pexport").css({
@@ -165,7 +164,7 @@ function get_playlists(){
 }
 
 function get_playlist_listing(){
-    API.chatLog("[PYE] Step 2: Fetch playlist listing");
+    API.chatLog("[PYE] Step 1: Fetch playlist listing");
 
     //Define the handler functions.
     function ajax_success(data){
@@ -202,7 +201,7 @@ function get_playlist_listing(){
 }
 
 function save_json(obj){
-    API.chatLog("[PYE] Step 5: Saving playlist file.");
+    API.chatLog("[PYE] Step 4: Saving playlist file.");
     var blob = new Blob(
         [JSON.stringify(obj)],
         {
