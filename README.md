@@ -1,4 +1,4 @@
-![PYE](https://raw.githubusercontent.com/SEAPUNK/PYE/dev/pye.png)
+![PYE](https://raw.githubusercontent.com/SEAPUNK/PYE/dev/src/s/img/pye.png)
 
 *plug.dj to youtube exporter*
 

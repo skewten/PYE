@@ -1,7 +1,22 @@
 doctype html
-head
-    title pye
-    script(src="/s/js/index.js")
-    link(rel="stylesheet", href="/s/css/index.css")
-body
-    h1 nothing here yet
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+
+        title PYE: plug.dj to Youtube playlist exporter
+
+        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
+        link(rel="stylesheet", href="/s/css/bootstrap-theme.css")
+
+        link(rel="stylesheet", href="/s/css/pye.css")
+    body
+        .container-fluid
+            .row
+                .col-md-4
+                    img(src="/s/img/pye.png", style="max-width: 100%;")
+
+        script(src="http://code.jquery.com/jquery-2.1.4.min.js")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+        script(src="/s/js/pye.js")
