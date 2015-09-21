@@ -1,6 +1,6 @@
 ![PYE](https://raw.githubusercontent.com/SEAPUNK/PYE/dev/src/s/img/pye.png)
 
-*plug.dj to youtube exporter*
+*plug.dj playlist exporter* - soundcloud and youtube!
 
 ---
 
