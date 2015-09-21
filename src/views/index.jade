@@ -7,7 +7,7 @@ html(lang="en")
 
         title PYE: plug.dj playlist exporter
 
-        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
+        link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
         link(rel="stylesheet", href="/s/css/bootstrap-theme.css")
 
         link(rel="stylesheet", href="/s/css/pye.css")
@@ -35,7 +35,7 @@ html(lang="en")
                             .meta
                         .task
                             .icon
-                            .text load youtube API
+                            .text load YT/SC APIs
                             .meta
                         .task
                             .icon
@@ -48,6 +48,10 @@ html(lang="en")
                         .task
                             .icon
                             .text authorize youtube
+                            .meta
+                        .task
+                            .icon
+                            .text authorize soundcloud
                             .meta
                         .task
                             .icon
@@ -69,7 +73,7 @@ html(lang="en")
                             span.text loading
                     #step-2.step.centered
                         .file-upload
-                            .step-title step 1
+                            .step-title step 2
                             .step-head upload the #[code PLUG_PLAYLISTS.json] file
                             .step-subhead.
                                 to make one, read this
@@ -79,6 +83,25 @@ html(lang="en")
                             #uploader.uploader
                                 .drop.centered(draggable='true')
                                     p drag the file into or click on the box
+                    #step-3.step.centered
+                        .loading-gapi
+                            .step-title step 3
+                            .step-head loading the Google APIs client JS...
+                            br
+                            .error.alert.alert-danger
+                    #step-4.step.centered
+                        .loading-playlists
+                            .step-title step 4
+                            .step-head loading playlist information...
+                            br
+                            .progress-items
+                                #load-playlists-progress
+                                    .info #[span ???] items left
+                                    .progress
+                                        .progress-bar.progress-bar-striped.active
+                            br
+                            .error.alert.alert-danger
+
         #loader
             span.icon
                 .glyphicon.glyphicon-refresh.spin
@@ -140,6 +163,10 @@ html(lang="en")
                             when it's released!
                     .modal-footer
                         button.btn.btn-default(type="button", data-dismiss="modal") Close
-        script(src="http://code.jquery.com/jquery-2.1.4.min.js")
-        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+
+
+        script(src="//code.jquery.com/jquery-2.1.4.min.js")
+        script(src="//connect.soundcloud.com/sdk-2.0.0.js")
+        script(src="//cdnjs.cloudflare.com/ajax/libs/async/1.4.2/async.min.js")
+        script(src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
         script(src="/s/js/pye.js", async)
