@@ -75,10 +75,14 @@ html(lang="en")
                                 to make one, read this
                                 #[a(data-toggle="modal", data-target="#creating-playlists") how-to]
                             br
+                            .error.alert.alert-danger
                             #uploader.uploader
                                 .drop.centered(draggable='true')
                                     p drag the file into or click on the box
-
+        #loader
+            span.icon
+                .glyphicon.glyphicon-refresh.spin
+            span.text loading
         #creating-playlists.modal.fade(tabindex="-1")
             .modal-dialog
                 .modal-content

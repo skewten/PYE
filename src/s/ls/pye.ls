@@ -1,5 +1,6 @@
 /*
-    PYE v2!
+    PYE! v2
+    rev.1
 
     Created by Ivan <ivan@sq10.net>
     MIT license
@@ -27,42 +28,96 @@ class PYE
         $ '#step-' + (num + 1)
             .show!
 
-        @steps[num + 1]!
+        @["step" + (num + 1)]!
 
-    steps:
-        2: ->
-            console.log 'Step 2 - File uploading.'
-            drop-box = $ '#uploader .drop'
-            # Clicking support
-            drop-box.click (e) ->
-                $ '#file-input' .on 'change', handle-file-change
-                $ '#file-input' .trigger 'click'
+    show-loader: ->
+        $ '#loader' .show!
 
-            handle-file-read = (e) ->
-                console.log e
+    hide-loader: ->
+        $ '#loader' .hide!
 
-            handle-file-change = (e) ->
-                file = $ '#file-input' .val!
-                reader = new FileReader!
-                reader.onloadend = handle-file-read
-                reader.read-as-data-URL file
+    step2: ->
+        console.log 'Step 2 - File uploading.'
+        drop-box = $ '#uploader .drop'
 
-            # Dragging support
-            stop = (e) ->
-                e.stop-propagation?!
-                e.prevent-default?!
+        loading = no
+        set-loading = (load) ~>
+            loading := load
+            if loading
+                @show-loader!
+            else
+                @hide-loader!
+
+        validate-data = (data) ~>
+            var json
+            try
+                json := JSON.parse data
+            catch e
                 return false
 
-            drop-box.on 'dragover', stop
-            drop-box.on 'dragenter', stop
+            if not json.is_plugdj_playlist
+            or not json.userid?
+            or not json.playlists?
+            or typeof! json.playlists is not "Object"
+                return false
 
-            drop-box.on 'drop', (e) ->
-                stop e
-                if e.data-transfer.files.length > 0
-                    file = e.data-transfer.files[0]
-                    reader = new FileReader!
-                    reader.onloadend = handle-file-read
-                    reader.read-as-data-URL file
+            for name, playlist of json.playlists
+                if typeof! playlist is not "Array"
+                    return false
+                for item in playlist
+                    if not item.type?
+                    or not item.id?
+                        return false
+
+            @raw-playlists = json
+
+            return true
+
+        throw-error = (text) ~>
+            $ '#step-2 .error'
+                .text text
+                .show!
+
+        handle-file-read = (e) ~>
+            data = e.target.result
+            if not validate-data data
+                throw-error "Could not validate file. Is it a PLUG_PLAYLISTS.json file?"
+                set-loading no
+            else
+                set-loading no
+                @step 2
+
+        # Clicking support
+        drop-box.click (e) ~>
+            $ '#file-input' .on 'change', handle-file-change
+            $ '#file-input' .trigger 'click'
+
+        handle-file-change = (e) ~>
+            if loading then return
+            set-loading yes
+            input = $ '#file-input' .get!
+            input = input[0]
+            reader = new FileReader!
+            reader.onloadend = handle-file-read
+            reader.read-as-text input.files[0]
+
+        # Dragging support
+        stop = (e) ~>
+            e.stop-propagation?!
+            e.prevent-default?!
+            return false
+
+        drop-box.on 'dragover', stop
+        drop-box.on 'dragenter', stop
+        drop-box.on 'drop', (e) ~>
+            stop e
+            if loading then return
+            set-loading yes
+            if e.data-transfer.files.length > 0
+                file = e.data-transfer.files[0]
+                reader = new FileReader!
+                reader.onloadend = handle-file-read
+                reader.read-as-text file
 
 window.onload = ->
     window.pye = new PYE!
