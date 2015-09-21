@@ -1,0 +1,52 @@
+html, body{
+    height: 100%;
+    width: 100%;
+    min-height: 600px;
+}
+
+hr{
+    margin: 5px 0;
+    border-color: darken(#FFF, 40%);
+}
+
+p{
+    margin: 10px 0;
+}
+
+a{
+    cursor: pointer;
+}
+
+.modal-backdrop{
+    z-index: 1000;
+}
+
+.modal-header{
+    border-bottom: 0;
+}
+.modal-body{
+    margin: 10px 0;
+}
+.modal-footer{
+    border-top: 0;
+}
+.close{
+    color: white;
+    &:hover{
+        color: white;
+    }
+}
+
+.alert.alert-warning{
+    background-color: transparent;
+}
+
+.centered{
+    position: relative;
+    & > *{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

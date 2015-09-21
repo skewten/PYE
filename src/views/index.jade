@@ -12,9 +12,10 @@ html(lang="en")
 
         link(rel="stylesheet", href="/s/css/pye.css")
     body
+        input#file-input(type="file")
         .container-fluid#main
             .row
-                .col-md-2#head
+                .col-sm-3#head
                     .header-padding
                     img.logo(src="/s/img/pye.png", style="max-width: 100%;")
                     hr
@@ -60,7 +61,81 @@ html(lang="en")
                             .icon
                             .text export results
                             .meta
+                .col-sm-9#body
+                    #step-1.step.centered
+                        .loading
+                            span.icon
+                                .glyphicon.glyphicon-refresh.spin
+                            span.text loading
+                    #step-2.step.centered
+                        .file-upload
+                            .step-title step 1
+                            .step-head upload the #[code PLUG_PLAYLISTS.json] file
+                            .step-subhead.
+                                to make one, read this
+                                #[a(data-toggle="modal", data-target="#creating-playlists") how-to]
+                            br
+                            #uploader.uploader
+                                .drop.centered(draggable='true')
+                                    p drag the file into or click on the box
 
+        #creating-playlists.modal.fade(tabindex="-1")
+            .modal-dialog
+                .modal-content
+                    .modal-body
+                        h1 Creating a #[code PLUG_PLAYLISTS.json] file
+                        p
+                            i This requires a good browser, like Google Chrome, or Firefox.
+
+                        p.
+                            First, your browser needs to have a variation of Greasemonkey.
+                            #[br]
+                            Click on the browser below to download the extension.
+                        hr
+                        br
+                        .userscript-plugins
+                            a.btn.btn-primary(
+                                target="_blank",
+                                href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
+                            ) Chrome
+                            a.btn.btn-primary(
+                                target="_blank",
+                                href="https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/"
+                            ) Firefox
+                            a.btn.btn-primary(
+                                target="_blank",
+                                href="http://www.macupdate.com/app/mac/20718/greasekit"
+                            ) Safari
+                        br
+                        hr
+                        p.
+                            Next, download and install the plug.dj playlist exporter userscript.
+                        hr
+                        br
+                        .userscript-button
+                            a.btn.btn-success.btn-lg(
+                                target="_blank",
+                                href="/s/js/pye.user.js"
+                            ) Userscript
+                        br
+                        hr
+                        p.
+                            Once installed, go to your favorite plug.dj room.
+                            #[br]
+                            If you're already in one, just reload the page for the script to take effect.
+                            #[br]
+                            When the room loads, type in #[code /pexport]
+                            into the chat, and follow its instructions.
+                            #[br]
+                            #[br]
+                            Once your file has saved, you can finally go back to the exporter,
+                            and input the saved PLUG_PLAYLISTS.json file.
+                        .alert.alert-warning.
+                            Save your #[code PLUG_PLAYLISTS.json] file!
+                            You can use it to import your plug.dj playlists into #[a(href="http://turn.dj", target="_blank") turn.dj],
+                            when it's released!
+                    .modal-footer
+                        button.btn.btn-default(type="button", data-dismiss="modal") Close
         script(src="http://code.jquery.com/jquery-2.1.4.min.js")
         script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-        script(src="/s/js/pye.js")
+        script(src="/s/js/pye.js", async)

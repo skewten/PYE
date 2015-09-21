@@ -1,88 +1,65 @@
+@import "_animations";
+@import "_common";
+@import "_head";
+@import "_creating_playlists";
+
+
 #main{
     padding: 50px;
+    height: 100%;
+    width: 100%;
+
+    & > .row{
+        height: 100%;
+    }
 }
 
-#head{
-    text-align: center;
+#file-input{
+    position: fixed;
+    top: -5000px;
+    left: -5000px;
 }
 
-.logo{
-    margin-bottom: 10px;
+#body{
+    height: 100%;
 }
 
-hr{
-    margin: 5px 0;
-    border-color: darken(#FFF, 40%);
-}
-
-#head .links{
-    font-size: 1.2em;
-    line-height: 2em;
+.step{
+    height: 100%;
+    width: 100%;
     position: relative;
-
-    a{
-        display: block;
-        position: absolute;
-        top: 0;
-        width: 50%;
-    }
-
-    .github{
-        left: 0;
-    }
-
-    .creator{
-        right: 0;
+    .step-title{
+        opacity: 0.4;
     }
 }
 
-#tasks{
-    margin-top: 20px;
-    text-align: left;
-
-    .task{
+#step-1{
+    .icon{
         position: relative;
-        font-size: 1.2em;
-        line-height: 1.8em;
+        font-size: 24px;
+        top: -5px;
+        margin-left: -20px;
+        margin-right: 20px;
+    }
+    .loading{
         font-weight: 300;
+        font-size: 3.4em;
+    }
+}
 
-        & > *{
-            display: inline-block;
-        }
-
-        &.done .icon:before{
-            content: '\e013'; //glyphicon-ok
-            color: rgb(132, 255, 103);
-        }
-
-        &.wait .icon:before{
-            content: '\e023'; //glyphicon-time
-            color: rgb(246, 255, 131);
-        }
-
-        &.fail .icon:before{
-            content: '\e014'; //glyphicon-remove
-            color: rgb(255, 132, 103);
-        }
-
-        .icon{
-            text-align: center;
-            font-family: 'Glyphicons Halflings';
-            width: 25px;
-            margin-right: 10px;
-            font-size: 0.8em;
-        }
-
-        .meta{
-            &:after{
-                content: '\00A0';
-            }
-            display: block;
-            font-size: 0.7em;
-            line-height: 1.2em;
-            margin-bottom: 5px;
-            color: darken(#FFF, 20%);
-            margin-left: 35px;
-        }
+#step-2{
+    .file-upload{
+        width: 100%;
+        max-width: 500px;
+    }
+    .drop{
+        cursor: pointer;
+        width: 100%;
+        max-width: 500px;
+        border: 2px darken(white, 50%) dashed;
+        min-height: 150px;
+    }
+    p{
+        margin: 0;
     }
 }
