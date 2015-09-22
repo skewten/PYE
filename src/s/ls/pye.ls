@@ -9,8 +9,8 @@
 patch-sc = ->
     # Monkeypatches the Soundcloud Client API to force HTTPS.
     fnc = SC.prepareRequestURI.toString!
-    fnc.replace 'function', 'var _fnc = function'
-    fnc.replace 'return uri', 'uri.scheme="https";return uri'
+    fnc = fnc.replace 'function', 'var _fnc = function'
+    fnc = fnc.replace 'return uri', 'uri.scheme="https";return uri'
     eval fnc
     SC.prepareRequestURI = _fnc.bind SC
 
