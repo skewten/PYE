@@ -6,6 +6,12 @@
     MIT license
 */
 
+patch-sc = ->
+    # Monkeypatches the Soundcloud Client API to force HTTPS.
+    fnc = SC.prepareRequestURI.toString!
+    fnc.replace 'return uri', 'uri.scheme="https";return uri'
+    SC.prepareRequestURI = (eval fnc).bind SC
+
 class PYE
     # Google API client ID.
 
@@ -31,6 +37,7 @@ class PYE
 
     init: ->
         $.event.props.push 'dataTransfer'
+        patch-sc!
         @step 2
 
     step: (num, fail) ->
