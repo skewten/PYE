@@ -24,8 +24,10 @@ class PYE
 
     # Soundcloud client ID.
     scapi-client-id: '279f0a297f0852bd0701b6437dd79317'
+
     # Soundcloud callback URI.
-    scapi-callback: 'http://pye.sq10.net/callback.html'
+    scapi-callback: 'http://pye.sq10.net/dev/callback.html'
+    # scapi-callback: 'http://pye.sq10.net/callback.html'
 
     init: ->
         $.event.props.push 'dataTransfer'
@@ -578,7 +580,6 @@ class PYE
             $ '#playlist-list .playlist.active' .remove-class 'active'
 
             $ '#video-list .video-playlist.active' .remove-class 'active'
-            console.log id
             $ '#video-list .video-playlist[data-playlist="'+id+'"]' .add-class 'active'
 
             parent.add-class 'active'
@@ -642,7 +643,18 @@ class PYE
                   immediate: no
                 handle-youtube-auth
 
-        console.log @selected-items
+        $ '#soundcloud-auth' .on 'click' ~>
+            <~ SC.connect
+            console.log 'SC AUTH CONNECT'
+            SC.get '/me', (me) ~>
+                console.log me
+
+        /*
+            id: "oFfdsfdQGFg"
+            name: "lorem ipsum blah blah blah"
+            playlist: "cool playlist"
+            type: "1"
+        */
 window.onload = ->
     window.pye = new PYE!
     pye.init!
