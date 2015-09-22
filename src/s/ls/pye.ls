@@ -338,9 +338,13 @@ class PYE
                     v-id = document.create-element 'span'
                     v-id.class-list.add 'vid'
                     v-id.text-content = item.id
+                    v-id-type = document.create-element 'span'
+                    v-id-type.class-list.add 'vidtype'
+                    v-id-type.text-content = item.type
 
                     vid.append-child vpo
                     vid.append-child v-id
+                    vid.append-child v-id-type
 
                     id = document.create-element 'span'
                     id.class-list.add 'id'
@@ -515,8 +519,38 @@ class PYE
             return callback!
 
     step5: ->
+        @hide-loader!
+
+        get-selected-items = ~>
+            allowed-playlists = []
+            playlists = $ '#playlist-list .playlist.selected' .get!
+            for playlist in playlists
+                allowed-playlists.push playlist.dataset.playlist
+
+            items = []
+            vids = $ '#video-list .video.selected' .get!
+            for vid in vids
+                vid = $ vid
+                obj = {}
+                obj.id = vid.find '.vid' .text!
+                obj.type = vid.find '.vidtype' .text!
+                obj.playlist = vid.find '.partof' .text!
+                obj.name = vid.find '.name' .text!
+
+                if obj.playlist in allowed-playlists
+                    items.push obj
+
+            return items
+
         $ '#done-selecting' .on 'click', ~>
-            console.log 'TODO'
+            items = get-selected-items!
+            if items.length is 0
+                $ '#step-5 .error'
+                    .text 'You must select at least one item from any playlist.'
+                    .show!
+                return
+            @selected-items = items
+            @step 6
 
     step5-pre: ->
         $ '#playlist-select-all' .on 'click', (e) ~>
@@ -585,6 +619,30 @@ class PYE
             else
                 change-vid-state no, [e.current-target]
 
+    step6: ->
+        handle-youtube-auth = (auth) ~>
+            if not auth
+                $ '#step-6 .error'
+                    .text 'Youtube auth failed. Try again.'
+                    .show!
+            else
+                if auth.error
+                    $ '#step-6 .error'
+                        .text 'Youtube auth failed. Try again.'
+                        .show!
+                else
+                    $ '#youtube-auth' .hide!
+                    $ '#no-youtube' .hide!
+                    $ '#start-export' .remove-class 'disabled'
+
+        $ '#youtube-auth' .on 'click' ~>
+            gapi.auth.authorize do
+                * client_id: @gapi-client-id
+                  scope: @gapi-scopes
+                  immediate: no
+                handle-youtube-auth
+
+        console.log @selected-items
 window.onload = ->
     window.pye = new PYE!
     pye.init!

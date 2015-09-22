@@ -28,43 +28,27 @@ html(lang="en")
                         .task.wait
                             .icon
                             .text load PYE
-                            .meta
                         .task
                             .icon
                             .text load playlist file
-                            .meta
                         .task
                             .icon
                             .text load YT/SC APIs
-                            .meta
                         .task
                             .icon
                             .text load playlists
-                            .meta
                         .task
                             .icon
                             .text select playlists
-                            .meta
                         .task
                             .icon
-                            .text authorize youtube
-                            .meta
-                        .task
-                            .icon
-                            .text authorize soundcloud
-                            .meta
-                        .task
-                            .icon
-                            .text start export
-                            .meta
+                            .text authorize YT/SC
                         .task
                             .icon
                             .text export
-                            .meta
                         .task
                             .icon
                             .text export results
-                            .meta
                 .col-sm-9#body
                     #step-1.step.centered
                         .loading
@@ -105,6 +89,7 @@ html(lang="en")
                         .select-playlists
                             .step-title step 5
                             .step-head select playlists you want to export #[br] #[em click on the video items to toggle selection]
+                            br
                             .error.alert.alert-danger
                             br
                             button#done-selecting.btn.btn-success.btn-lg(type="button") done selecting
@@ -123,6 +108,24 @@ html(lang="en")
                                             button#video-select-all.btn.btn-default(type="button") select all
                                             button#video-select-none.btn.btn-default(type="button") select none
                                     br
+                    #step-6.step.centered
+                        .authorize-apis
+                            .step-title step 6
+                            .step-head authorize APIs you want to use
+                            br
+                            .error.alert.alert-danger
+                            br
+                            button#youtube-auth.btn.btn-primary.btn-lg Youtube
+                            | &nbsp;&nbsp;&nbsp;
+                            button#soundcloud-auth.btn.btn-primary.btn-lg Soundcloud
+                            br
+                            br
+                            hr
+                            br
+                            #no-soundcloud.alert.alert-warning Soundcloud items will NOT be exported!
+                            #no-youtube.alert.alert-warning Youtube items will NOT be exported!
+                            button#start-export.btn.btn-success.btn-lg.disabled(type="button") start export
+
         #loader
             span.icon
                 .glyphicon.glyphicon-refresh.spin
