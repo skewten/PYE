@@ -263,6 +263,20 @@
 
 #step-6{
     #youtube-auth{
-        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+#step-7{
+    .exporting{
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .progress-items .info{
+        font-style: italic;
+        opacity: 0.7;
+        font-size: 0.8em;
+        line-height: 1.5em;
     }
 }

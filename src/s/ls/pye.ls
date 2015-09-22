@@ -636,14 +636,14 @@ class PYE
                     $ '#no-youtube' .hide!
                     $ '#start-export' .remove-class 'disabled'
 
-        $ '#youtube-auth' .on 'click' ~>
+        $ '#youtube-auth' .on 'click', ~>
             gapi.auth.authorize do
                 * client_id: @gapi-client-id
                   scope: @gapi-scopes
                   immediate: no
                 handle-youtube-auth
 
-        $ '#soundcloud-auth' .on 'click' ~>
+        $ '#soundcloud-auth' .on 'click', ~>
             <~ SC.connect
             SC.get '/me', (me) ~>
                 if not me.full_name?
@@ -656,13 +656,20 @@ class PYE
                     $ '#no-soundcloud' .hide!
                     $ '#start-export' .remove-class 'disabled'
 
+        $ '#start-export' .on 'click', (e) ~>
+            if $ e.target .has-class 'disabled' then return
+            @step 7
 
+    step7: ->
+        console.log "TODO: exporting"
+        console.log @selected-playlists
         /*
             id: "oFfdsfdQGFg"
             name: "lorem ipsum blah blah blah"
             playlist: "cool playlist"
             type: "1"
         */
+
 window.onload = ->
     window.pye = new PYE!
     pye.init!

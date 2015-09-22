@@ -114,7 +114,6 @@ html(lang="en")
                             .step-head authorize APIs you want to use
                             br
                             .error.alert.alert-danger
-                            br
                             button#youtube-auth.btn.btn-primary.btn-lg Youtube
                             button#soundcloud-auth.btn.btn-primary.btn-lg Soundcloud
                             br
@@ -124,7 +123,18 @@ html(lang="en")
                             #no-soundcloud.alert.alert-warning Soundcloud items will NOT be exported!
                             #no-youtube.alert.alert-warning Youtube items will NOT be exported!
                             button#start-export.btn.btn-success.btn-lg.disabled(type="button") start export
-
+                    #step-7.step.centered
+                        .exporting
+                            .step-title step 7
+                            .step-head exporting...
+                            br
+                            .progress-items
+                                #export-progress
+                                    .info #[span ???] items left
+                                    .progress
+                                        .progress-bar.progress-bar-striped.active
+                            br
+                            .error.alert.alert-danger
         #loader
             span.icon
                 .glyphicon.glyphicon-refresh.spin
