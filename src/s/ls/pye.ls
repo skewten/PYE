@@ -645,9 +645,17 @@ class PYE
 
         $ '#soundcloud-auth' .on 'click' ~>
             <~ SC.connect
-            console.log 'SC AUTH CONNECT'
             SC.get '/me', (me) ~>
-                console.log me
+                if not me.full_name?
+                    $ '#step-6 .error'
+                        .text 'Soundcloud auth failed. Try again.'
+                        .show!
+                    return
+                else
+                    $ '#soundcloud-auth' .hide!
+                    $ '#no-soundcloud' .hide!
+                    $ '#start-export' .remove-class 'disabled'
+
 
         /*
             id: "oFfdsfdQGFg"
