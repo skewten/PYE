@@ -8,9 +8,17 @@
 
 class PYE
     # Google API client ID.
-    gapi-client-id: '889751255111-qjkp9cvcrn7m3rkv2kuhoia0flguvhbr.apps.googleusercontent.com'
+
+    #TODO: remove when done testing
+    gapi-client-id: '719647262562-a2tcd0qim9u39jk1slq0ji4h7gr3u4ah.apps.googleusercontent.com'
+    #gapi-client-id: '889751255111-qjkp9cvcrn7m3rkv2kuhoia0flguvhbr.apps.googleusercontent.com'
     # Google API key.
-    gapi-api-key: 'AIzaSyA8d5uzO4wx3h1ZXcyVw-N2F9a-yhx8TtI'
+
+    #TODO: remove when done testing
+    gapi-api-key: 'AIzaSyB316fvTuhhQtE-Tqz6gD-WxEzINiCt5sk'
+
+    #gapi-api-key: 'AIzaSyA8d5uzO4wx3h1ZXcyVw-N2F9a-yhx8TtI'
+
     # Google API scopes, in this case the managing of a Youtube account.
     gapi-scopes: 'https://www.googleapis.com/auth/youtube'
 
@@ -40,7 +48,7 @@ class PYE
         $ tasks[num - 1]
             .add-class 'wait'
 
-        $ '#step-' + (num - 1)
+        $ '.step'
             .hide!
 
         $ '#step-' + num
@@ -176,20 +184,229 @@ class PYE
         q = async.queue do
             (item, done) ~>
                 if item.item.type is 1
-                    process-youtube-item item, done
+                    process-youtube-item item, ~>
+                        item-done-handler!
+                        done!
                 else
-                    process-soundcloud-item item, done
+                    process-soundcloud-item item, ~>
+                        item-done-handler!
+                        done!
             50 # Concurrency
         q.pause!
         q.drain = ~>
-            alert "all done"
+            render-playlists!
 
-        item-done-handler = ->
-            $ '#step-4 .progress-bar'
-                .css do
-                    width: (len-left / len)+"%"
-            $ '#step-4 .info span'
-                .text len-left
+        /*
+            ===========================
+            ☆ BRING ON THE SPAGHETTI ☆
+            ===========================
+            "LOL U SHOULDVE USED REACT"
+                            - YOU
+
+            tl;dr this is the part where the code
+            gets messy.
+
+            if you want to help clean it up, feel free to
+                open up a pull request!
+        */
+
+        render-playlists = ~>
+            $ '#step-4 .step-head' .text 'rendering playlists...'
+            $ '#load-playlists-progress .info' .hide!
+            $ '#load-playlists-progress .progress-bar' .css do
+                width: '0%'
+
+
+            len = 0
+            do ~>
+                for _, i of @parsed-playlists
+                    for z in i
+                        len++
+            len-left = len
+
+            update-progress = ~>
+                --len-left
+                percent = Math.floor(100 - ((len-left / len) * 100))
+                $ '#load-playlists-progress .progress-bar' .css do
+                    width: percent + '%'
+
+            counts = {}
+
+            q = async.queue (item, done) ~>
+                set-timeout do
+                    ~>
+                        q-make-playlist item, done
+
+            playlists = []
+            video-playlists = []
+            q-make-playlist = (item, done) ~>
+
+                create-playlist = (name) ~>
+                    if name in playlists
+                        return
+                    playlists.push name
+                    counts[name] = 0
+
+                    P = document.get-element-by-id 'playlist-list'
+
+                    playlist = document.create-element "div"
+                    playlist.class-list.add "playlist","input-group"
+                    playlist.dataset.playlist = name
+
+                    id = document.create-element "span"
+                    id.class-list.add "id"
+                    id.text-content = name
+
+                    btn = document.create-element "span"
+                    btn.class-list.add "input-group-btn"
+                    btn-b = document.create-element "button"
+                    btn-b.type = "button"
+                    btn-b.class-list.add "select","btn","btn-default"
+                    btn-plus = document.create-element "span"
+                    btn-plus.class-list.add "glyphicon","glyphicon-plus"
+                    btn-b.append-child btn-plus
+                    btn-b.class-list.add "select","btn","btn-default"
+                    btn-minus = document.create-element "span"
+                    btn-minus.class-list.add "glyphicon","glyphicon-minus"
+                    btn-b.append-child btn-minus
+                    btn.append-child btn-b
+
+                    inp = document.create-element "input"
+                    inp.class-list.add "form-control"
+                    inp.type = "text"
+                    inp.disabled = yes
+                    inp.value = name
+
+                    gb = document.create-element "span"
+                    gb.class-list.add "input-group-btn"
+                    gbb = document.create-element "button"
+                    gbb.class-list.add "btn", "btn-default", "song-selector"
+                    gbb.type = "button"
+
+                    gbbc = document.create-element "span"
+                    gbbc.class-list.add "count"
+                    gbbc.text-content = '0'
+                    gbbcs = document.create-element "span"
+                    gbbcs.text-content = '/'
+                    gbbct = document.create-element "span"
+                    gbbct.class-list.add "total-count"
+
+
+                    gbb.append-child gbbc
+                    gbb.append-child gbbcs
+                    gbb.append-child gbbct
+                    gb.append-child gbb
+
+                    playlist.append-child id
+                    playlist.append-child btn
+                    playlist.append-child inp
+                    playlist.append-child gb
+
+                    P.append-child playlist
+
+                create-video-playlist = (name) ~>
+                    if name in video-playlists
+                        return
+                    video-playlists.push name
+                    VP = document.get-element-by-id 'video-list'
+
+                    vp = document.create-element 'div'
+                    vp.class-list.add 'video-playlist'
+                    vp.dataset.playlist = name
+
+                    VP.append-child vp
+
+                create-video-item = (name, item) ~>
+                    counts[name]++
+
+                    vps = $ '#video-list .video-playlist'
+                        .get!
+
+                    var vp
+                    for v in vps
+                        if v.dataset.playlist is name
+                            vp := v
+
+                    vid = document.create-element 'div'
+                    vid.class-list.add 'video'
+                    if item.error
+                        vid.class-list.add 'errored'
+
+                    vpo = document.create-element 'span'
+                    vpo.class-list.add 'partof'
+                    vpo.text-content = name
+                    v-id = document.create-element 'span'
+                    v-id.class-list.add 'vid'
+                    v-id.text-content = item.id
+
+                    vid.append-child vpo
+                    vid.append-child v-id
+
+                    id = document.create-element 'span'
+                    id.class-list.add 'id'
+                    id.text-content = item.id
+
+                    vid.append-child id
+
+                    if item.error
+                        err = document.create-element 'div'
+                        err.class-list.add 'err'
+                        err.text-content = 'could not fetch'
+
+                        vid.append-child err
+                    else
+                        img = document.create-element 'div'
+                        img.class-list.add 'img'
+                        img.style.background-image = "url(#{item.thumb})"
+                        bg = document.create-element 'div'
+                        bg.class-list.add 'bg'
+                        name = document.create-element 'div'
+                        name.class-list.add 'name'
+                        name.text-content = item.name
+                        channel = document.create-element 'div'
+                        channel.class-list.add 'channel'
+                        channel.text-content = item.author
+
+                        vid.append-child img
+                        vid.append-child bg
+                        vid.append-child name
+                        vid.append-child channel
+
+                    vp.append-child vid
+
+                create-playlist item.name
+                create-video-playlist item.name
+                create-video-item item.name, item.item
+
+                done!
+
+            q.drain = ~>
+                for name, count of counts
+                    $ '#playlist-list .playlist[data-playlist=\"'+name+'\"] .total-count'
+                        .text count
+
+                @step5-pre!
+
+
+                $ '#playlist-select-all' .trigger 'click'
+                playlists = $ '#playlist-list .playlist'
+                    .get!
+
+                $ playlists[0]
+                    .find '.song-selector'
+                    .trigger 'click'
+
+                $ '#video-list .video' .trigger 'click'
+
+                @step 5
+
+            pp = []
+            for name, p of @parsed-playlists
+                for i in p
+                    pp.push do
+                        name: name
+                        item: i
+            q.push pp, update-progress
 
         for name, items of @raw-playlists.playlists
             for item in items
@@ -198,10 +415,21 @@ class PYE
                         name: name
                         item: item
                     }
-                    item-done-handler
 
         len = q.length!
         len-left = len
+
+        item-done-handler = ->
+            --len-left
+
+            percent = Math.floor(100 - ((len-left / len) * 100))
+
+            $ '#step-4 .progress-bar'
+                .css do
+                    width: "#{percent}%"
+
+            $ '#step-4 .info span'
+                .text len-left
 
         q.resume!
 
@@ -230,7 +458,9 @@ class PYE
                 ritems = resp.items
                 if not ritems?
                 or ritems.length is not 1
-                    parsed-video.error = yes
+                    pitem.error = yes
+                    pitem.id = item.item.id
+                    pitem.type = item.item.type
                     return callback!
                 ritem = ritems[0]
                 pitem.name = ritem.snippet.title
@@ -257,6 +487,12 @@ class PYE
 
             track <~ SC.get "/tracks/#{item.item.id}"
 
+            if track.errors
+                pitem.error = yes
+                pitem.id = item.item.id
+                pitem.type = item.item.type
+                return callback!
+
             if not track.title?
             or not track.{}user.avatar_url?
             or not track.{}user.username?
@@ -277,6 +513,77 @@ class PYE
             pitem.id = item.item.id
             pitem.type = item.item.type
             return callback!
+
+    step5: ->
+        $ '#done-selecting' .on 'click', ~>
+            console.log 'TODO'
+
+    step5-pre: ->
+        $ '#playlist-select-all' .on 'click', (e) ~>
+            $ '#playlist-list .playlist'
+                .add-class 'selected'
+
+        $ '#playlist-select-none' .on 'click', (e) ~>
+            $ '#playlist-list .playlist'
+                .remove-class 'selected'
+
+        $ '#playlist-list .playlist button.select' .on 'click', (e) ~>
+            parent = $ e.current-target
+                .parent!.parent!
+            selected = parent.has-class 'selected'
+            parent.toggle-class 'selected'
+
+        $ '#playlist-list .playlist .song-selector' .on 'click', (e) ~>
+            parent = $ e.current-target
+                .parent!.parent!
+
+            id = parent
+                .children '.id'
+                .text!
+
+            $ '#playlist-list .playlist.active' .remove-class 'active'
+
+            $ '#video-list .video-playlist.active' .remove-class 'active'
+            console.log id
+            $ '#video-list .video-playlist[data-playlist="'+id+'"]' .add-class 'active'
+
+            parent.add-class 'active'
+
+        change-vid-state = (select, vids) ->
+            for vid in vids
+                error = $ vid
+                    .has-class 'errored'
+
+                if error then continue
+
+                id = $ vid .find '.partof' .text!
+
+                count = $ '#playlist-list .playlist[data-playlist="'+id+'"] .count'
+
+                selected = $ vid
+                    .has-class 'selected'
+
+                if select and not selected
+                    $ vid .add-class 'selected'
+                    count.text (parse-int count.text!) + 1
+                if not select and selected
+                    $ vid .remove-class 'selected'
+                    count.text (parse-int count.text!) - 1
+
+        $ '#video-select-all' .on 'click', (e) ~>
+            change-vid-state yes, $ '#video-list .video-playlist.active .video' .get!
+
+        $ '#video-select-none' .on 'click', (e) ~>
+            change-vid-state no, $ '#video-list .video-playlist.active .video' .get!
+
+        $ '#video-list .video' .on 'click', (e) ~>
+            selected = $ e.current-target
+                .has-class 'selected'
+
+            if not selected
+                change-vid-state yes, [e.current-target]
+            else
+                change-vid-state no, [e.current-target]
 
 window.onload = ->
     window.pye = new PYE!

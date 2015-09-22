@@ -96,3 +96,167 @@
         line-height: 1.5em;
     }
 }
+
+#step-5{
+    .select-playlists{
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    input.form-control[disabled]{
+        background-color: transparent;
+        border-left: 0;
+        border-right: 0;
+    }
+
+    .playlist{
+        margin-bottom: 5px;
+        .id{
+            display: none;
+        }
+        input{
+            border-color: white;
+        }
+
+        .glyphicon-minus{
+            display: none;
+            color: lighten(red, 20%);
+        }
+        .glyphicon-plus{
+            color: lighten(green, 20%);
+        }
+        &.active{
+            button.song-selector{
+                background-color: rgba(255, 255, 255, 0.2);
+
+                &:hover{
+                    background-color: rgba(0, 0, 0, 0.2);
+                }
+                &:active{
+                    background-color: #CCC;
+                }
+            }
+        }
+        &.selected{
+            input{
+                background-color: rgba(0, 255, 0, 0.1);
+            }
+            .glyphicon-plus{
+                display: none;
+            }
+            .glyphicon-minus{
+                position: relative;
+                top: 3px;
+                display: inline;
+            }
+        }
+    }
+
+    #video-list .video-playlist{
+        display: none;
+        &.active{
+            display: block;
+        }
+    }
+
+    .video{
+        .partof, .vid{
+            display: none;
+        }
+
+        &.errored{
+            cursor: no-drop;
+        }
+
+        text-align: left;
+
+        width: 100%;
+        max-width: 500px;
+        overflow: hidden;
+        margin: 0 auto;
+        border: 1px white solid;
+        border-bottom: 0;
+        height: 120px;
+        padding: 10px;
+        padding-left: 10px;
+        position: relative;
+        cursor: pointer;
+        transition: padding-left, 0.2s;
+
+        &.selected{
+            padding-left: 20px;
+        }
+
+        .id, .name, .channel, .err{
+            float: left;
+            clear: both;
+            white-space: nowrap;
+            position: relative;
+            z-index: 3;
+        }
+        .id{
+            font-style: italic;
+            opacity: 0.6;
+            font-size: 0.7em;
+
+            &:before{
+                content: "ID: ";
+            }
+        }
+
+        .img{
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-image: url("/s/img/default-video.png");
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .bg{
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            top: 0;
+            left: -10px;
+            z-index: 2;
+            background-color: lighten(green, 20%);
+            transition: left, 0.2s;
+        }
+
+        &.selected .bg{
+            left: 0;
+        }
+
+        .name{
+            line-height: 1.5em;
+            font-size: 2em;
+        }
+
+        .channel{
+            opacity: 0.7;
+        }
+
+        .err{
+            color: #EC9C9C;
+            font-style: italic;
+            position: absolute;
+            bottom: 7px;
+            left: 10px;
+            transition: left, 0.2s;
+        }
+
+        &.selected .err{
+            left: 20px;
+        }
+
+        &:last-child{
+            border-bottom: 1px white solid;
+        }
+    }
+}
