@@ -493,7 +493,10 @@ class PYE
 
             track <~ SC.get "/tracks/#{item.item.id}"
 
-            if track.errors
+
+
+            if not track?
+            or track.errors
                 pitem.error = yes
                 pitem.id = item.item.id
                 pitem.type = item.item.type
@@ -661,8 +664,10 @@ class PYE
             @step 7
 
     step7: ->
-        console.log "TODO: exporting"
-        console.log @selected-playlists
+
+        @selected-items
+
+
         /*
             id: "oFfdsfdQGFg"
             name: "lorem ipsum blah blah blah"
