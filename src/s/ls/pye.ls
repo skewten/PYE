@@ -772,7 +772,7 @@ class PYE
                     console.error "Error message: #{resp.error.message}"
                     handle-item-done!
 
-            for item in @selected-items
+            process-item = (item, done) ~>
                 if not p[item.playlist]
                     req = gapi.client.youtube.playlists.insert do
                         part: 'snippet,status'
@@ -792,6 +792,7 @@ class PYE
                         p-ids[item.playlist] = resp.result.id
                         p[item.playlist] = async.queue process-item
                         p[item.playlist].push item, handle-yt-done
+                        return done!
                     else
                         console.error "Got error from Youtube while creating playlist."
                         console.error "Error code: #{resp.error.code}"
@@ -799,14 +800,23 @@ class PYE
                         p[item.playlist] = "ERR"
                         @failed-items.push item
                         handle-item-done!
+                        return done!
 
                 else
                     if p[item.playlist] is "ERR"
                         @failed-items.push item
                         handle-item-done!
+                        return done!
                     else
                         p[item.playlist].push item, handle-yt-done
+                        return done!
 
+            do ~>
+                q = async.queue process-item
+                q.pause!
+                for item in @selected-items
+                    q.push item
+                q.resume!
 
         for item in @selected-items
             item.type = parse-int item.type
