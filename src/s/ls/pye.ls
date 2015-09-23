@@ -714,7 +714,7 @@ class PYE
                     playlist:
                         title: "[PYE] #{name} by #{@raw-playlists.userid}"
                         description: 'created with PYE (http://pye.sq10.net)'
-                    tracks: tracks
+                        tracks: tracks
                 if response.permalink_url?
                 and response.tracks?
                     id-map = {}
