@@ -865,7 +865,7 @@ class PYE
             $ '#failed-items .list-group'
                 .append "<div \
                     class='list-group-item'>
-                        #{p.playlist} => #{p.name} [#{p.id}]
+                        #{item.playlist} => #{item.name} [#{item.id}]
                     </div>"
 
     step8: ->
