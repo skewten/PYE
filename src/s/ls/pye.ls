@@ -787,7 +787,7 @@ class PYE
                             status:
                                 privacyStatus: 'private'
 
-                    resp <~ request.execute
+                    resp <~ req.execute
                     if not resp.error
                         @added-playlists.y[item.playlist] =
                             url: "https://youtube.com/playlist?list=#{resp.result.id}"
