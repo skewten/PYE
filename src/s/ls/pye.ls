@@ -742,7 +742,9 @@ class PYE
                     console.error response
 
             for name, tracks of playlists
-                set-timeout ~> get name, tracks
+                fnc = (name, tracks) ~>
+                    set-timouet ~> get name, tracks
+                fnc name, tracks
 
         export-youtube = ~>
             ...
