@@ -646,6 +646,7 @@ class PYE
                 else
                     $ '#youtube-auth' .hide!
                     $ '#no-youtube' .hide!
+                    @youtube-allowed = yes
                     $ '#start-export' .remove-class 'disabled'
 
         $ '#youtube-auth' .on 'click', ~>
@@ -666,6 +667,7 @@ class PYE
                 else
                     $ '#soundcloud-auth' .hide!
                     $ '#no-soundcloud' .hide!
+                    @soundcloud-allowed = yes
                     $ '#start-export' .remove-class 'disabled'
 
         $ '#start-export' .on 'click', (e) ~>
@@ -673,9 +675,61 @@ class PYE
             @step 7
 
     step7: ->
+        total = 0
+        left = 0
 
-        @selected-items
+        @failed-items = []
+        @succeeded-items = []
+        @added-playlists =
+            s: {}
+            y: {}
 
+        handle-item-done = () ~>
+            left--
+            percent = Math.floor(100 - ((left / total) * 100))
+            $ '#export-progress .progress-bar' .css do
+                width: percent + '%'
+            info = $ '#export-progress .info'
+            info.find '.succeeded' .text succeeded-items.length
+            info.find '.failed' .text failed-items.length
+            if not left
+                @step 8
+
+        export-soundcloud = ~>
+            sc-q = async.queue (items) ~>
+                playlists = {}
+                for item in items
+                    if not playlists[item.playlist]
+                        playlists[item.playlist] = []
+                    playlist = playlists[item.playlist]
+                    playlist.push do
+                        id: parse-int id
+
+                for name, tracks of playlists
+                    response <~ SC.post '/playlists',
+                        playlist:
+                            title: "[PYE] #{name} by #{@raw-playlists.userid}"
+                            description: 'created with PYE (http://pye.sq10.net)'
+                        tracks: tracks
+                    console.log response
+            sc-p = {}
+
+        export-youtube = ~>
+            ...
+
+        for item in @selected-items
+            if item.type is 1 and @youtube-allowed
+                total++
+            if item.type is 2 and @soundcloud-allowed
+                total++
+
+        left := total
+
+        if @soundcloud-allowed
+            set-timeout ~> export-soundcloud!
+
+        if @youtube-allowed
+            set-timeout ~> export-youtube!
 
         /*
             id: "oFfdsfdQGFg"
