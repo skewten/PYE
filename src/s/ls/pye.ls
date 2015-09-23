@@ -759,7 +759,7 @@ class PYE
                                 kind: 'youtube#video',
                                 videoId: item.id
                     callback: (resp) ~>
-                        handle-yt-done resp, item
+                        done resp
 
             handle-yt-done = (resp, item) ~>
                 if not resp.error
@@ -791,7 +791,7 @@ class PYE
                             name: item.playlist
                         p-ids[item.playlist] = resp.result.id
                         p[item.playlist] = async.queue process-item
-                        p[item.playlist].push item, handle-yt-done
+                        p[item.playlist].push item, ~> handle-yt-done it, item
                         return done!
                     else
                         console.error "Got error from Youtube while creating playlist."
@@ -808,7 +808,7 @@ class PYE
                         handle-item-done!
                         return done!
                     else
-                        p[item.playlist].push item, handle-yt-done
+                        p[item.playlist].push item, ~> handle-yt-done it, item
                         return done!
 
             do ~>
