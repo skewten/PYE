@@ -4,7 +4,7 @@
 
 ---
 
-This is the code that will soon power [pye.sq10.net](http://pye.sq10.net).
+This is the code that now powers [pye.sq10.net](http://pye.sq10.net).
 
 ---
 
