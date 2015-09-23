@@ -817,6 +817,7 @@ class PYE
                 q = async.queue process-item
                 q.pause!
                 for item in @selected-items
+                    if item.type is not 1 then continue
                     q.push item
                 q.resume!
 
