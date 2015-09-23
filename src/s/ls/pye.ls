@@ -743,7 +743,7 @@ class PYE
 
             for name, tracks of playlists
                 fnc = (name, tracks) ~>
-                    set-timouet ~> get name, tracks
+                    set-timeout ~> get name, tracks
                 fnc name, tracks
 
         export-youtube = ~>
