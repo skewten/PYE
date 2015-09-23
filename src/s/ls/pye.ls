@@ -478,11 +478,16 @@ class PYE
                     pitem.type = item.item.type
                     return callback!
                 ritem = ritems[0]
-                pitem.name = ritem.snippet.title
-                pitem.author = ritem.snippet.channel-title
-                pitem.thumb = ritem.snippet.thumbnails.medium.url
-                pitem.id = item.item.id
-                pitem.type = item.item.type
+                if ritem.snippet.title?
+                    pitem.name = ritem.snippet.title
+                    pitem.author = ritem.snippet.channel-title
+                    pitem.thumb = ritem.snippet.thumbnails.medium.url
+                    pitem.id = item.item.id
+                    pitem.type = item.item.type
+                else
+                    pitem.error = yes
+                    pitem.id = item.item.id
+                    pitem.type = item.item.type
                 return callback!
             else
                 $ '#step-4 .error'
@@ -717,7 +722,7 @@ class PYE
                 if response.permalink_url?
                 and response.tracks?
                     @added-playlists.s[name] =
-                        url: response.permalink
+                        url: response.permalink_url
                         name: name
 
                     id-map = {}
@@ -848,7 +853,7 @@ class PYE
                     </a>"
 
         for _, p of @added-playlists.s
-            $ '#playlist-list-yt .list-group'
+            $ '#playlist-list-sc .list-group'
                 .append "<a \
                     target='_blank' \
                     href='#{p.url}' \
@@ -857,7 +862,7 @@ class PYE
                     </a>"
 
         for item in @failed-items
-            $ '#playlist-list-yt .list-group'
+            $ '#failed-items .list-group'
                 .append "<div \
                     class='list-group-item'>
                         #{p.playlist} => #{p.name} [#{p.id}]
