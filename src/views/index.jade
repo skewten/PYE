@@ -78,6 +78,11 @@ html(lang="en")
                             .step-title step 4
                             .step-head loading playlist information...
                             br
+                            .alert.alert-warning.
+                                if there are very few items left that are stuck,
+                                it's likely because soundcloud is having issues.
+                                try reloading the page and trying again.
+                            br
                             .progress-items
                                 #load-playlists-progress
                                     .info #[span ???] items left
@@ -146,7 +151,10 @@ html(lang="en")
                                 br
                                 .list-group
                             #failed-items.col-sm-4
-                                .row failed items
+                                .row
+                                    | failed items
+                                    br
+                                    em usually due to copyright/availability issues
                                 br
                                 .list-group
                             #playlist-list-sc.col-sm-4
