@@ -781,26 +781,28 @@ class PYE
                         part: 'snippet,status'
                         resource:
                             snippet:
-                                title: "#{item.playlist} by #{@raw-playlists.userid} (plug.dj)",
-                                description: 'A plug.dj playlist export. (Done with pye.sq10.net)',
+                                title: "#{item.playlist} by #{@raw-playlists.userid} (plug.dj)"
+                                description: 'A plug.dj playlist export. (Done with pye.sq10.net)'
                                 tags: ["plug.dj", "pye.sq10.net", "pye_exported_playlist"]
                             status:
                                 privacyStatus: 'private'
+
                     resp <~ request.execute
-                        if not resp.error
-                            @added-playlists.y[item.playlist] =
-                                url: "https://youtube.com/playlist?list=#{resp.result.id}"
-                                name: item.playlist
-                            p-ids[item.playlist] = resp.result.id
-                            p[item.playlist] = async.queue process-item
-                            p[item.playlist].push item, handle-yt-done
-                        else
-                            console.error "Got error from Youtube while creating playlist."
-                            console.error "Error code: #{resp.error.code}"
-                            console.error "Error message: #{resp.error.message}"
-                            p[item.playlist] = "ERR"
-                            @failed-items.push item
-                            handle-item-done!
+                    if not resp.error
+                        @added-playlists.y[item.playlist] =
+                            url: "https://youtube.com/playlist?list=#{resp.result.id}"
+                            name: item.playlist
+                        p-ids[item.playlist] = resp.result.id
+                        p[item.playlist] = async.queue process-item
+                        p[item.playlist].push item, handle-yt-done
+                    else
+                        console.error "Got error from Youtube while creating playlist."
+                        console.error "Error code: #{resp.error.code}"
+                        console.error "Error message: #{resp.error.message}"
+                        p[item.playlist] = "ERR"
+                        @failed-items.push item
+                        handle-item-done!
+
                 else
                     if p[item.playlist] is "ERR"
                         @failed-items.push item
