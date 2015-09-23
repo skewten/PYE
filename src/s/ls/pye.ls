@@ -717,6 +717,7 @@ class PYE
             ...
 
         for item in @selected-items
+            item.type = parse-int item.type
             if item.type is 1 and @youtube-allowed
                 total++
             if item.type is 2 and @soundcloud-allowed
