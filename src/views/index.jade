@@ -1,0 +1,232 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+
+        title PYE: plug.dj playlist exporter
+
+        link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
+        link(rel="stylesheet", href="s/css/bootstrap-theme.css")
+
+        link(rel="stylesheet", href="s/css/pye.css")
+    body
+        input#file-input(type="file")
+        .container-fluid#main
+            .row
+                .col-sm-3#head
+                    .header-padding
+                    img.logo(src="s/img/pye.png", style="max-width: 100%;")
+                    hr
+                    .links
+                        a.github(href="https://github.com/SEAPUNK/PYE") Github
+                        .split &nbsp;
+                        a.creator(href="https://ivan.moe/") Creator
+                    hr
+                    #tasks
+                        .task.wait
+                            .icon
+                            .text load PYE
+                        .task
+                            .icon
+                            .text load playlist file
+                        .task
+                            .icon
+                            .text load YT/SC APIs
+                        .task
+                            .icon
+                            .text load playlists
+                        .task
+                            .icon
+                            .text select playlists
+                        .task
+                            .icon
+                            .text authorize YT/SC
+                        .task
+                            .icon
+                            .text export
+                        .task
+                            .icon
+                            .text export results
+                .col-sm-9#body
+                    #step-1.step.centered
+                        .loading
+                            span.icon
+                                .glyphicon.glyphicon-refresh.spin
+                            span.text loading
+                    #step-2.step.centered
+                        .file-upload
+                            .step-title step 2
+                            .step-head upload the #[code PLUG_PLAYLISTS.json] file
+                            .step-subhead.
+                                to make one, read this
+                                #[a(data-toggle="modal", data-target="#creating-playlists") how-to]
+                            br
+                            .error.alert.alert-danger
+                            #uploader.uploader
+                                .drop.centered(draggable='true')
+                                    p drag the file into or click on the box
+                    #step-3.step.centered
+                        .loading-gapi
+                            .step-title step 3
+                            .step-head loading the Google APIs client JS...
+                            br
+                            .error.alert.alert-danger
+                    #step-4.step.centered
+                        .loading-playlists
+                            .step-title step 4
+                            .step-head loading playlist information...
+                            br
+                            .alert.alert-warning.
+                                if there are very few items left that are stuck,
+                                it's likely because soundcloud is having issues.
+                                wait, or reload the page and try again.
+                            br
+                            .progress-items
+                                #load-playlists-progress
+                                    .info #[span ???] items left
+                                    .progress
+                                        .progress-bar.progress-bar-striped.active
+                            br
+                            .error.alert.alert-danger
+                    #step-5.step
+                        .select-playlists
+                            .step-title step 5
+                            .step-head select playlists you want to export #[br] #[em click on the video items to toggle selection]
+                            br
+                            .error.alert.alert-danger
+                            br
+                            button#done-selecting.btn.btn-success.btn-lg(type="button") done selecting
+                            br
+                            br
+                            .row
+                                #playlist-list.col-sm-5
+                                    .row
+                                        .btn-group
+                                            button#playlist-select-all.btn.btn-default(type="button") select all
+                                            button#playlist-select-none.btn.btn-default(type="button") select none
+                                    br
+                                #video-list.col-sm-7
+                                    .row
+                                        .btn-group
+                                            button#video-select-all.btn.btn-default(type="button") select all
+                                            button#video-select-none.btn.btn-default(type="button") select none
+                                    br
+                    #step-6.step.centered
+                        .authorize-apis
+                            .step-title step 6
+                            .step-head authorize APIs you want to use
+                            br
+                            .error.alert.alert-danger
+                            button#youtube-auth.btn.btn-primary.btn-lg Youtube
+                            button#soundcloud-auth.btn.btn-primary.btn-lg Soundcloud
+                            br
+                            br
+                            hr
+                            br
+                            #no-soundcloud.alert.alert-warning Soundcloud items will NOT be exported!
+                            #no-youtube.alert.alert-warning Youtube items will NOT be exported!
+                            button#start-export.btn.btn-success.btn-lg.disabled(type="button") start export
+                    #step-7.step.centered
+                        .exporting
+                            .step-title step 7
+                            .step-head exporting...
+                            br
+                            .progress-items
+                                #export-progress
+                                    .info #[span.succeeded 0] items succeeded, #[span.failed 0] items failed
+                                    .progress
+                                        .progress-bar.progress-bar-striped.active
+                            br
+                            .error.alert.alert-danger
+                    #step-8.step
+                        .step-title step 8
+                        .step-head all done! enjoy your playlists.
+                        br
+                        br
+                        .row
+                            #playlist-list-yt.col-sm-4
+                                .row youtube playlists
+                                br
+                                .list-group
+                            #failed-items.col-sm-4
+                                .row
+                                    | failed items
+                                    br
+                                    em usually due to copyright/availability issues
+                                br
+                                .list-group
+                            #playlist-list-sc.col-sm-4
+                                .row soundcloud playlists
+                                br
+                                .list-group
+
+        #loader
+            span.icon
+                .glyphicon.glyphicon-refresh.spin
+            span.text loading
+        #creating-playlists.modal.fade(tabindex="-1")
+            .modal-dialog
+                .modal-content
+                    .modal-body
+                        h1 Creating a #[code PLUG_PLAYLISTS.json] file
+                        p
+                            i This requires a good browser, like Google Chrome, or Firefox.
+
+                        p.
+                            First, your browser needs to have a variation of Greasemonkey.
+                            #[br]
+                            Click on the browser below to download the extension.
+                        hr
+                        br
+                        .userscript-plugins
+                            a.btn.btn-primary(
+                                target="_blank",
+                                href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
+                            ) Chrome
+                            a.btn.btn-primary(
+                                target="_blank",
+                                href="https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/"
+                            ) Firefox
+                            a.btn.btn-primary(
+                                target="_blank",
+                                href="http://www.macupdate.com/app/mac/20718/greasekit"
+                            ) Safari
+                        br
+                        hr
+                        p.
+                            Next, download and install the plug.dj playlist exporter userscript.
+                        hr
+                        br
+                        .userscript-button
+                            a.btn.btn-success.btn-lg(
+                                target="_blank",
+                                href="s/userscript/pye.user.js"
+                            ) Userscript
+                        br
+                        hr
+                        p.
+                            Once installed, go to your favorite plug.dj room.
+                            #[br]
+                            If you're already in one, just reload the page for the script to take effect.
+                            #[br]
+                            When the room loads, type in #[code /pexport]
+                            into the chat, and follow its instructions.
+                            #[br]
+                            #[br]
+                            Once your file has saved, you can finally go back to the exporter,
+                            and input the saved PLUG_PLAYLISTS.json file.
+                        .alert.alert-warning.
+                            Save your #[code PLUG_PLAYLISTS.json] file!
+                            You can use it to import your plug.dj playlists into #[a(href="http://turn.dj", target="_blank") turn.dj],
+                            when it's released!
+                    .modal-footer
+                        button.btn.btn-default(type="button", data-dismiss="modal") Close
+
+
+        script(src="//code.jquery.com/jquery-2.1.4.min.js")
+        script(src="https://connect.soundcloud.com/sdk-2.0.0.js")
+        script(src="//cdnjs.cloudflare.com/ajax/libs/async/1.4.2/async.min.js")
+        script(src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+        script(src="s/js/pye.js", async)
