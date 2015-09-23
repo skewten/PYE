@@ -697,7 +697,8 @@ class PYE
 
         export-soundcloud = ~>
             playlists = {}
-            for item in items
+            for item in @selected-items
+                if item.type is not 2 then continue
                 if not playlists[item.playlist]
                     playlists[item.playlist] = []
                 playlist = playlists[item.playlist]
