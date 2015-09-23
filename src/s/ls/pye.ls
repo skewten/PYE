@@ -16,16 +16,10 @@ patch-sc = ->
 
 class PYE
     # Google API client ID.
+    gapi-client-id: '889751255111-qjkp9cvcrn7m3rkv2kuhoia0flguvhbr.apps.googleusercontent.com'
 
-    #TODO: remove when done testing
-    gapi-client-id: '719647262562-a2tcd0qim9u39jk1slq0ji4h7gr3u4ah.apps.googleusercontent.com'
-    #gapi-client-id: '889751255111-qjkp9cvcrn7m3rkv2kuhoia0flguvhbr.apps.googleusercontent.com'
     # Google API key.
-
-    #TODO: remove when done testing
-    gapi-api-key: 'AIzaSyB316fvTuhhQtE-Tqz6gD-WxEzINiCt5sk'
-
-    #gapi-api-key: 'AIzaSyA8d5uzO4wx3h1ZXcyVw-N2F9a-yhx8TtI'
+    gapi-api-key: 'AIzaSyA8d5uzO4wx3h1ZXcyVw-N2F9a-yhx8TtI'
 
     # Google API scopes, in this case the managing of a Youtube account.
     gapi-scopes: 'https://www.googleapis.com/auth/youtube'
@@ -34,8 +28,7 @@ class PYE
     scapi-client-id: '279f0a297f0852bd0701b6437dd79317'
 
     # Soundcloud callback URI.
-    scapi-callback: 'http://pye.sq10.net/dev/callback.html'
-    # scapi-callback: 'http://pye.sq10.net/callback.html'
+    scapi-callback: 'http://pye.sq10.net/callback.html'
 
     init: ->
         $.event.props.push 'dataTransfer'
