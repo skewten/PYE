@@ -684,7 +684,7 @@ class PYE
             s: {}
             y: {}
 
-        handle-item-done = () ~>
+        handle-item-done = ~>
             left--
             percent = Math.floor(100 - ((left / total) * 100))
             $ '#export-progress .progress-bar' .css do
