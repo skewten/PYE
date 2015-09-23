@@ -758,7 +758,7 @@ class PYE
                             resourceId:
                                 kind: 'youtube#video',
                                 videoId: item.id
-                    callback: ~>
+                    callback: (resp) ~>
                         handle-yt-done resp, item
 
             handle-yt-done = (resp, item) ~>
