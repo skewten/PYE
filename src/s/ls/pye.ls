@@ -696,23 +696,21 @@ class PYE
                 @step 8
 
         export-soundcloud = ~>
-            sc-q = async.queue (items) ~>
-                playlists = {}
-                for item in items
-                    if not playlists[item.playlist]
-                        playlists[item.playlist] = []
-                    playlist = playlists[item.playlist]
-                    playlist.push do
-                        id: parse-int id
+            playlists = {}
+            for item in items
+                if not playlists[item.playlist]
+                    playlists[item.playlist] = []
+                playlist = playlists[item.playlist]
+                playlist.push do
+                    id: parse-int id
 
-                for name, tracks of playlists
-                    response <~ SC.post '/playlists',
-                        playlist:
-                            title: "[PYE] #{name} by #{@raw-playlists.userid}"
-                            description: 'created with PYE (http://pye.sq10.net)'
-                        tracks: tracks
-                    console.log response
-            sc-p = {}
+            for name, tracks of playlists
+                response <~ SC.post '/playlists',
+                    playlist:
+                        title: "[PYE] #{name} by #{@raw-playlists.userid}"
+                        description: 'created with PYE (http://pye.sq10.net)'
+                    tracks: tracks
+                console.log response
 
         export-youtube = ~>
             ...
