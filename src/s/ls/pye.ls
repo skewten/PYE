@@ -703,7 +703,7 @@ class PYE
                     playlists[item.playlist] = []
                 playlist = playlists[item.playlist]
                 playlist.push do
-                    id: parse-int id
+                    id: parse-int item.id
 
             for name, tracks of playlists
                 response <~ SC.post '/playlists',
