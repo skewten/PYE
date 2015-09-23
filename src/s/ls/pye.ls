@@ -699,7 +699,6 @@ class PYE
             playlists = {}
             sel-id-map = {}
             for item in @selected-items
-                console.log item
                 sel-id-map[item.id] = item
                 if item.type is not 2 then continue
                 if not playlists[item.playlist]
@@ -709,7 +708,6 @@ class PYE
                     id: parse-int item.id
 
             for name, tracks of playlists
-                console.log tracks
                 response <~ SC.post '/playlists',
                     playlist:
                         title: "[PYE] #{name} by #{@raw-playlists.userid}"
@@ -721,14 +719,23 @@ class PYE
                     for rtrack in response.tracks
                         id-map[rtrack.id] = rtrack
 
+                    console.log 'got response'
+                    console.log response
+                    console.log id-map
+                    console.log tracks
+                    console.log '----'
+
                     for track in tracks
                         if id-map[track.id]
+                            console.log 'debug: soundcloud succeeded'
                             @succeeded-items.push id-map[track.id]
                         else
+                            console.log 'debug: soundcloud failed (not in id-map)'
                             @failed-items.push sel-id-map[track.id]
                         handle-item-done!
                 else
                     for track in tracks
+                        console.log 'debug: soundcloud failed (bad response)'
                         @failed-items.push sel-id-map[track.id]
                         handle-item-done!
                     console.error "Got bad response from Soundcloud: "
