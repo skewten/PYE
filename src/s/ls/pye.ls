@@ -690,8 +690,8 @@ class PYE
             $ '#export-progress .progress-bar' .css do
                 width: percent + '%'
             info = $ '#export-progress .info'
-            info.find '.succeeded' .text succeeded-items.length
-            info.find '.failed' .text failed-items.length
+            info.find '.succeeded' .text @succeeded-items.length
+            info.find '.failed' .text @failed-items.length
             if not left
                 @step 8
 
