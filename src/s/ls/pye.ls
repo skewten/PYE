@@ -715,27 +715,22 @@ class PYE
                         tracks: tracks
                 if response.permalink_url?
                 and response.tracks?
+                    @added-playlists.s[name] =
+                        url: response.permalink
+                        name: name
+
                     id-map = {}
                     for rtrack in response.tracks
                         id-map[rtrack.id] = rtrack
 
-                    console.log 'got response'
-                    console.log response
-                    console.log id-map
-                    console.log tracks
-                    console.log '----'
-
                     for track in tracks
                         if id-map[track.id]
-                            console.log 'debug: soundcloud succeeded'
                             @succeeded-items.push id-map[track.id]
                         else
-                            console.log 'debug: soundcloud failed (not in id-map)'
                             @failed-items.push sel-id-map[track.id]
                         handle-item-done!
                 else
                     for track in tracks
-                        console.log 'debug: soundcloud failed (bad response)'
                         @failed-items.push sel-id-map[track.id]
                         handle-item-done!
                     console.error "Got bad response from Soundcloud: "
@@ -747,7 +742,72 @@ class PYE
                 fnc name, tracks
 
         export-youtube = ~>
-            ...
+            p = {}
+            p-ids = {}
+
+            process-item = (item, done) ~>
+                gapi.client.request do
+                    path: "youtube/v3/playlistItems"
+                    method: "POST"
+                    params:
+                        part: 'snippet'
+                    body:
+                        part: 'snippet'
+                        snippet:
+                            playlistId: p-ids[item.playlist]
+                            resourceId:
+                                kind: "youtube#video",
+                                videoId: item.id
+                    callback: ~>
+                        handle-yt-done resp, item
+
+            handle-yt-done = (response, item) ~>
+                console.log response
+                console.log item
+                console.log "="*25
+                if not resp.error
+                    @succeeded-items.push item
+                    handle-item-done!
+                else
+                    @failed-items.push item
+                    console.error "An error occured while inserting Youtube item #{item.id}"
+                    console.error "Error code: #{resp.error.code}"
+                    console.error "Error message: #{resp.error.message}"
+                    handle-item-done!
+
+            for item in @selected-items
+                if not p[item.playlist]
+                    req = gapi.client.youtube.playlists.insert do
+                        part: 'snippet,status'
+                        resource:
+                            snippet:
+                                title: "#{item.playlist} by #{@raw-playlists.userid} (plug.dj)",
+                                description: 'A plug.dj playlist export. (Done with pye.sq10.net)',
+                                tags: ["plug.dj", "pye.sq10.net", "pye_exported_playlist"]
+                            status:
+                                privacyStatus: 'private'
+                    resp <~ request.execute
+                        if not resp.error
+                            @added-playlists.y[item.playlist] =
+                                url: "https://youtube.com/playlist?list=#{resp.result.id}"
+                                name: item.playlist
+                            p-ids[item.playlist] = resp.result.id
+                            p[item.playlist] = async.queue process-item
+                            p[item.playlist].push item, handle-yt-done
+                        else
+                            console.error "Got error from Youtube while creating playlist."
+                            console.error "Error code: #{resp.error.code}"
+                            console.error "Error message: #{resp.error.message}"
+                            p[item.playlist] = "ERR"
+                            @failed-items.push item
+                            handle-item-done!
+                else
+                    if p[item.playlist] is "ERR"
+                        @failed-items.push item
+                        handle-item-done!
+                    else
+                        p[item.playlist].push item, handle-yt-done
+
 
         for item in @selected-items
             item.type = parse-int item.type
