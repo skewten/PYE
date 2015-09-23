@@ -707,7 +707,7 @@ class PYE
                 playlist.push do
                     id: parse-int item.id
 
-            for name, tracks of playlists
+            get = (name, tracks) ~>
                 response <~ SC.post '/playlists',
                     playlist:
                         title: "[PYE] #{name} by #{@raw-playlists.userid}"
@@ -740,6 +740,9 @@ class PYE
                         handle-item-done!
                     console.error "Got bad response from Soundcloud: "
                     console.error response
+
+            for name, tracks of playlists
+                set-timeout ~> get name, tracks
 
         export-youtube = ~>
             ...
