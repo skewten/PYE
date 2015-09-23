@@ -747,7 +747,7 @@ class PYE
 
             process-item = (item, done) ~>
                 gapi.client.request do
-                    path: "youtube/v3/playlistItems"
+                    path: 'youtube/v3/playlistItems'
                     method: "POST"
                     params:
                         part: 'snippet'
@@ -756,7 +756,7 @@ class PYE
                         snippet:
                             playlistId: p-ids[item.playlist]
                             resourceId:
-                                kind: "youtube#video",
+                                kind: 'youtube#video',
                                 videoId: item.id
                     callback: ~>
                         handle-yt-done resp, item
