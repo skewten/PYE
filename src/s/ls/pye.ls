@@ -693,6 +693,7 @@ class PYE
             info.find '.succeeded' .text @succeeded-items.length
             info.find '.failed' .text @failed-items.length
             if not left
+                @step8-pre!
                 @step 8
 
         export-soundcloud = ~>
@@ -836,12 +837,34 @@ class PYE
         if @youtube-allowed
             set-timeout ~> export-youtube!
 
-        /*
-            id: "oFfdsfdQGFg"
-            name: "lorem ipsum blah blah blah"
-            playlist: "cool playlist"
-            type: "1"
-        */
+    step8-pre: ->
+        for _, p of @added-playlists.y
+            $ '#playlist-list-yt .list-group'
+                .append "<a \
+                    target='_blank' \
+                    href='#{p.url}' \
+                    class='list-group-item'>
+                        #{p.name}
+                    </a>"
+
+        for _, p of @added-playlists.s
+            $ '#playlist-list-yt .list-group'
+                .append "<a \
+                    target='_blank' \
+                    href='#{p.url}' \
+                    class='list-group-item'>
+                        #{p.name}
+                    </a>"
+
+        for item in @failed-items
+            $ '#playlist-list-yt .list-group'
+                .append "<div \
+                    class='list-group-item'>
+                        #{p.playlist} => #{p.name} [#{p.id}]
+                    </div>"
+
+    step8: ->
+        console.log "BOOM, we good"
 
 window.onload = ->
     window.pye = new PYE!
