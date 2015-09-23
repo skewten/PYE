@@ -761,10 +761,7 @@ class PYE
                     callback: ~>
                         handle-yt-done resp, item
 
-            handle-yt-done = (response, item) ~>
-                console.log response
-                console.log item
-                console.log "="*25
+            handle-yt-done = (resp, item) ~>
                 if not resp.error
                     @succeeded-items.push item
                     handle-item-done!
