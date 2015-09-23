@@ -697,7 +697,10 @@ class PYE
 
         export-soundcloud = ~>
             playlists = {}
+            sel-id-map = {}
             for item in @selected-items
+                console.log item
+                sel-id-map[item.id] = item
                 if item.type is not 2 then continue
                 if not playlists[item.playlist]
                     playlists[item.playlist] = []
@@ -706,12 +709,30 @@ class PYE
                     id: parse-int item.id
 
             for name, tracks of playlists
+                console.log tracks
                 response <~ SC.post '/playlists',
                     playlist:
                         title: "[PYE] #{name} by #{@raw-playlists.userid}"
                         description: 'created with PYE (http://pye.sq10.net)'
                     tracks: tracks
-                console.log response
+                if response.permalink_url?
+                and response.tracks?
+                    id-map = {}
+                    for rtrack in response.tracks
+                        id-map[rtrack.id] = rtrack
+
+                    for track in tracks
+                        if id-map[track.id]
+                            @succeeded-items.push id-map[track.id]
+                        else
+                            @failed-items.push sel-id-map[track.id]
+                        handle-item-done!
+                else
+                    for track in tracks
+                        @failed-items.push sel-id-map[track.id]
+                        handle-item-done!
+                    console.error "Got bad response from Soundcloud: "
+                    console.error response
 
         export-youtube = ~>
             ...
