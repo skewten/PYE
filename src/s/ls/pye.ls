@@ -745,7 +745,7 @@ class PYE
             p = {}
             p-ids = {}
 
-            process-item = (item, done) ~>
+            process-playlist-item = (item, done) ~>
                 gapi.client.request do
                     path: 'youtube/v3/playlistItems'
                     method: "POST"
@@ -759,18 +759,20 @@ class PYE
                                 kind: 'youtube#video',
                                 videoId: item.id
                     callback: (resp) ~>
-                        done resp
+                        handle-yt-done resp, item, done
 
-            handle-yt-done = (resp, item) ~>
+            handle-yt-done = (resp, item, done) ~>
                 if not resp.error
                     @succeeded-items.push item
                     handle-item-done!
+                    return done!
                 else
                     @failed-items.push item
                     console.error "An error occured while inserting Youtube item #{item.id}"
                     console.error "Error code: #{resp.error.code}"
                     console.error "Error message: #{resp.error.message}"
                     handle-item-done!
+                    return done!
 
             process-item = (item, done) ~>
                 if not p[item.playlist]
@@ -790,8 +792,8 @@ class PYE
                             url: "https://youtube.com/playlist?list=#{resp.result.id}"
                             name: item.playlist
                         p-ids[item.playlist] = resp.result.id
-                        p[item.playlist] = async.queue process-item
-                        p[item.playlist].push item, ~> handle-yt-done it, item
+                        p[item.playlist] = async.queue process-playlist-item
+                        p[item.playlist].push item
                         return done!
                     else
                         console.error "Got error from Youtube while creating playlist."
@@ -808,7 +810,7 @@ class PYE
                         handle-item-done!
                         return done!
                     else
-                        p[item.playlist].push item, ~> handle-yt-done it, item
+                        p[item.playlist].push item
                         return done!
 
             do ~>
