@@ -1,4 +1,4 @@
-![PYE](https://raw.githubusercontent.com/SEAPUNK/PYE/dev/src/s/img/pye.png)
+![PYE](https://raw.githubusercontent.com/SEAPUNK/PYE/master/src/s/img/pye.png)
 
 *plug.dj playlist exporter* - soundcloud and youtube!
 
