@@ -17,4 +17,4 @@ contributors
 ---
 
 * [ivan](https://ivan.moe/) - creator
-* @SickRed - userscript fixes for greasemonkey
+* [SickRed](https://github.com/SickRed) - userscript fixes for greasemonkey
