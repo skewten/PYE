@@ -45,7 +45,7 @@ function start_export(){
     }
     API.chatLog("[PYE] Step 1: Check for and load FileSaver.js");
     if (typeof saveAs === 'undefined'){
-        $.getScript("https://media.sq10.net/pye/FileSaver.js").done(function(){
+        $.getScript("https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js").done(function(){
             get_playlist_listing();
         }).fail(function(jqxhr, settings, exception){
             API.chatLog("[PYE] Could not fetch FileSaver.js!", true);
