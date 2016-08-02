@@ -18,3 +18,4 @@ contributors
 
 * [ivan](https://ivan.moe/) - creator
 * [SickRed](https://github.com/SickRed) - userscript fixes for greasemonkey
+* [itotallyrock](https://github.com/itotallyrock) - userscript fixes

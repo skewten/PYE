@@ -3,7 +3,7 @@
 // @description    Creates plug.dj playlist JSON files, and saves them to harddrive.
 // @author         Ivan (sq10.net)
 // @include        https://plug.dj/*
-// @version        2.0.9
+// @version        2.0.10
 // @require        https://media.sq10.net/pye/FileSaver.js
 // @grant          none
 // ==/UserScript==
