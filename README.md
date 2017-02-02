@@ -4,6 +4,8 @@
 
 ---
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/skewten/PYE.svg)](https://greenkeeper.io/)
+
 This is the code that now powers [pye.sq10.net](http://pye.sq10.net).
 
 ---
