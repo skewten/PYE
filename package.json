@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "browser-sync": "^2.8.2",
-    "del": "^1.2.1",
+    "del": "^2.2.2",
     "express": "^4.13.3",
     "gulp": "^3.9.0",
     "jade": "^1.11.0",
